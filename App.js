@@ -3,7 +3,8 @@ import React from 'react';
 import { StyleSheet, LogBox, ImagePropTypes } from 'react-native';
 import { RFPercentage } from "react-native-responsive-fontsize"
 import AnimatedSplash from "react-native-animated-splash-screen";
-import { createDrawerNavigator } from "@react-navigation/drawer"
+// import { createDrawerNavigator } from "@react-navigation/drawer"
+import { createStackNavigator } from "@react-navigation/stack"
 import { NavigationContainer } from "@react-navigation/native"
 
 import LoginScreen from "./app/screeens/LoginScreen"
@@ -12,15 +13,31 @@ import HomeScreen from "./app/screeens/HomeScreen"
 
 import colors from "./app/config/colors"
 
-const Stack = createDrawerNavigator();
+// const Stack = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
+  const config = {
+    animation: 'timing',
+    config: {
+      stiffness: 1000,
+      damping: 500,
+      mass: 3,
+      overshootClamping: true,
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 0.01,
+    },
+  };
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='loginScreen' drawerType="front" overlayColor="transparent" edgeWidth={100} drawerStyle={{
-        backgroundColor: colors.white,
-        width: 0
-      }}
+      <Stack.Navigator screenOptions={{
+        headerShown: false,
+        transitionSpec: {
+          open: config,
+          close: config,
+        },
+      }} initialRouteName='loginScreen' drawerType="front" overlayColor="transparent" edgeWidth={100}
       >
         <Stack.Screen name="loginScreen" >{(props) => <LoginScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="registerScreen" >{(props) => <RegisterScreen {...props} />}</Stack.Screen>

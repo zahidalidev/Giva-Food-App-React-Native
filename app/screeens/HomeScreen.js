@@ -132,7 +132,7 @@ function HomeScreen(props) {
                                 {/* Search feilds */}
                                 <View style={{ width: "90%" }} >
                                     <AppTextInput
-                                        placeHolder="Search"
+                                        placeHolder="Search for food"
                                         width="100%"
                                         value={searchValue}
                                         onChange={(text) => setSearchValue(text)}

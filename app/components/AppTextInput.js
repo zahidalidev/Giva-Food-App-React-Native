@@ -24,7 +24,7 @@ function AppTextInput({ elevation = 0, borderColor = colors.primary, rightIcon =
                 <TextInput style={{ color: colors.grey, padding: RFPercentage(1), width: rightButtonText ? "70%" : "90%", width: rightIcon ? "80%" : "90%", fontSize: RFPercentage(2.2) }}
                     placeholder={placeHolder}
                     value={value}
-                    secureTextEntry={secure && eyeIcon}
+                    secureTextEntry={secure && !eyeIcon}
                     editable={editable}
                     onChangeText={(text) => onChange(text)}
                     onResponderStart={startEdit}
