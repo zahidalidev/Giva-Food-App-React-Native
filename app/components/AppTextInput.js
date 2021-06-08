@@ -5,14 +5,14 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 
 import colors from "../config/colors"
 
-function AppTextInput({ rightIcon = false, rightFunction, borderWidth = 0, placeHolder, value, onChange, width = "100%", height = RFPercentage(6.2), icon, fontWeight, rightButtonText, secure = false, iconType = "MaterialCommunityIcons", editable = true, startEdit, endEdit, border = false }) {
+function AppTextInput({ elevation = 0, borderColor = colors.primary, rightIcon = false, rightFunction, borderWidth = 0, placeHolder, value, onChange, width = "100%", height = RFPercentage(6), icon, fontWeight, rightButtonText, secure = false, iconType = "MaterialCommunityIcons", editable = true, startEdit, endEdit, border = false }) {
     const [eyeIcon, setEyeIcon] = useState(false)
 
     return (
         <View style={{
             backgroundColor: colors.white, borderRadius: RFPercentage(1.2),
             width: width, alignItems: 'flex-start', justifyContent: 'center',
-            borderWidth: borderWidth, borderColor: colors.primary, height: RFPercentage(6)
+            borderWidth: borderWidth, borderColor: borderColor, height, elevation
         }}>
             <View style={{ width: "100%", flexDirection: "row", alignItems: "center" }} >
                 {iconType === "MaterialIcons" ?
@@ -24,7 +24,7 @@ function AppTextInput({ rightIcon = false, rightFunction, borderWidth = 0, place
                 <TextInput style={{ color: colors.grey, padding: RFPercentage(1), width: rightButtonText ? "70%" : "90%", width: rightIcon ? "80%" : "90%", fontSize: RFPercentage(2.2) }}
                     placeholder={placeHolder}
                     value={value}
-                    secureTextEntry={!(secure && eyeIcon)}
+                    secureTextEntry={secure && eyeIcon}
                     editable={editable}
                     onChangeText={(text) => onChange(text)}
                     onResponderStart={startEdit}
@@ -33,7 +33,7 @@ function AppTextInput({ rightIcon = false, rightFunction, borderWidth = 0, place
 
                 {secure ?
                     <TouchableOpacity onPress={() => setEyeIcon(!eyeIcon)} style={{ width: "10%", justifyContent: "center", alignItems: "flex-start" }} >
-                        <MaterialCommunityIcons color={colors.primary} style={{ right: RFPercentage(1) }} size={RFPercentage(3)} name={eyeIcon ? "eye-outline" : "eye-off-outline"} />
+                        <MaterialCommunityIcons color={eyeIcon ? colors.primary : colors.secondary} style={{ right: RFPercentage(1) }} size={RFPercentage(3)} name={eyeIcon ? "eye-outline" : "eye-off-outline"} />
                     </TouchableOpacity>
                     : null}
 
@@ -45,7 +45,7 @@ function AppTextInput({ rightIcon = false, rightFunction, borderWidth = 0, place
 
                 {rightIcon ?
                     <TouchableOpacity onPress={() => rightFunction()} style={{ width: "10%", justifyContent: "center", alignItems: "center" }} >
-                        <MaterialCommunityIcons key={'3'} color={colors.grey} style={{ right: RFPercentage(1) }} size={RFPercentage(3)} name={rightIcon} />
+                        <MaterialCommunityIcons key={'3'} color={colors.primary} style={{ right: RFPercentage(1) }} size={RFPercentage(3)} name={rightIcon} />
                     </TouchableOpacity>
                     : null
                 }

@@ -47,7 +47,7 @@ function LoginScreen(props) {
         //     const { data } = await loginUser(email, password);
         //     await AsyncStorage.setItem('token', data.id.toString());
         //     setIndicator(false)
-        //     props.navigation.navigate('home')
+        props.navigation.navigate('homeScreen')
         // } catch (error) {
         //     console.log("login error: ", error);
         //     setIndicator(false)
@@ -83,7 +83,7 @@ function LoginScreen(props) {
             {/* Kitchen buddy top container */}
             <View style={{ backgroundColor: colors.primary, width: "100%", flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
                 <View style={{ width: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }} >
-                    <Text style={{ marginBottom: RFPercentage(5), fontSize: RFPercentage(9), color: colors.white }} >
+                    <Text style={{ marginBottom: RFPercentage(5), fontSize: RFPercentage(8), color: colors.white }} >
                         Logo
                     </Text>
                 </View>
