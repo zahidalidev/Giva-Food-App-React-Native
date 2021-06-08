@@ -17,7 +17,7 @@ const Stack = createDrawerNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='login' drawerType="front" overlayColor="transparent" edgeWidth={100} drawerStyle={{
+      <Stack.Navigator initialRouteName='loginScreen' drawerType="front" overlayColor="transparent" edgeWidth={100} drawerStyle={{
         backgroundColor: colors.white,
         width: 0
       }}
