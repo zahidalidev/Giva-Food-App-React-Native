@@ -12,6 +12,7 @@ import LoginScreen from "./app/screeens/LoginScreen"
 import RegisterScreen from "./app/screeens/RegisterScreen"
 import HomeScreen from "./app/screeens/HomeScreen"
 import ProductScreen from "./app/screeens/ProductScreen"
+import ProductDetailsScreen from "./app/screeens/ProductDetailsScreen"
 
 import colors from "./app/config/colors"
 
@@ -45,6 +46,7 @@ export default function App() {
         <Stack.Screen name="registerScreen" >{(props) => <RegisterScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="homeScreen" >{(props) => <HomeScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="productScreen" >{(props) => <ProductScreen {...props} />}</Stack.Screen>
+        <Stack.Screen name="productDetailsScreen" >{(props) => <ProductDetailsScreen {...props} />}</Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

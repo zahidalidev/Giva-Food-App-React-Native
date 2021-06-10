@@ -135,7 +135,7 @@ function ProductScreen(props) {
                                 data={products.length === 0 ? [{ blank: true }] : products}
                                 keyExtractor={(item, index) => item.id}
                                 renderItem={({ item, index }) =>
-                                    <TouchableOpacity onPress={() => props.navigation.navigate('productScreen', { item: item })} activeOpacity={0.9} style={{
+                                    <TouchableOpacity onPress={() => props.navigation.navigate('productDetailsScreen', { item: item })} activeOpacity={0.9} style={{
                                         margin: RFPercentage(1),
                                         marginRight: RFPercentage(2),
                                         marginBottom: 0,
