@@ -7,9 +7,11 @@ import AnimatedSplash from "react-native-animated-splash-screen";
 import { createStackNavigator } from "@react-navigation/stack"
 import { NavigationContainer } from "@react-navigation/native"
 
+// Screens
 import LoginScreen from "./app/screeens/LoginScreen"
 import RegisterScreen from "./app/screeens/RegisterScreen"
 import HomeScreen from "./app/screeens/HomeScreen"
+import ProductScreen from "./app/screeens/ProductScreen"
 
 import colors from "./app/config/colors"
 
@@ -42,6 +44,7 @@ export default function App() {
         <Stack.Screen name="loginScreen" >{(props) => <LoginScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="registerScreen" >{(props) => <RegisterScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="homeScreen" >{(props) => <HomeScreen {...props} />}</Stack.Screen>
+        <Stack.Screen name="productScreen" >{(props) => <ProductScreen {...props} />}</Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

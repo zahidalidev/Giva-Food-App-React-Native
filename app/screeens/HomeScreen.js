@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Text, RefreshControl, ActivityIndicator, Dimensions, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import { Text, RefreshControl, ActivityIndicator, Dimensions, FlatList, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import Constants from 'expo-constants'
 import { RFPercentage } from 'react-native-responsive-fontsize';
-import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { Appbar } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Components
 import AppTextInput from '../components/AppTextInput';
-import colors from '../config/colors';
 import banner from "../../assets/images/banner.png"
 import CategoryCard from "../components/CategoryCard";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Appbar } from 'react-native-paper';
+
+// config
+import colors from '../config/colors';
 // import { getAllIngredients } from "../services/ingredientsService";
 // import GetSqlDate from '../components/commmon/GetSqlDate';
 
@@ -18,6 +19,10 @@ const windowWidth = Dimensions.get('window').width;
 
 function HomeScreen(props) {
     const [searchValue, setSearchValue] = useState('');
+    const [oldIngredients, setOldIngredients] = useState([]);
+    const [activityIndic, setActivityIndic] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+
     const [ingredients, setIngredients] = useState([
         {
             id: 0,
@@ -44,9 +49,6 @@ function HomeScreen(props) {
             image: "https://freepngimg.com/save/10721-burger-transparent/2400x2132",
         },
     ]);
-    const [oldIngredients, setOldIngredients] = useState([]);
-    const [activityIndic, setActivityIndic] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
 
 
     const onRefresh = React.useCallback(() => {
@@ -105,6 +107,7 @@ function HomeScreen(props) {
                 <Appbar.Action color={colors.white} icon="account-circle" onPress={() => { }} />
             </Appbar.Header>
             <View style={styles.container}>
+
                 {/* Top container */}
                 <View style={{ width: windowWidth, backgroundColor: colors.primary, height: RFPercentage(28), justifyContent: 'flex-start', alignItems: "center" }} >
                     <View style={{ marginTop: RFPercentage(2), flexDirection: 'row', width: "90%", justifyContent: "space-between" }} >
@@ -128,8 +131,8 @@ function HomeScreen(props) {
                         {/* Bottom Contaienr */}
                         <View style={{ flexDirection: 'column', marginTop: -RFPercentage(7), borderTopLeftRadius: RFPercentage(8), backgroundColor: colors.white, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
 
+                            {/* Search feilds */}
                             <View style={{ flexDirection: 'column', marginTop: RFPercentage(5) }} >
-                                {/* Search feilds */}
                                 <View style={{ width: "90%" }} >
                                     <AppTextInput
                                         placeHolder="Search for food"
@@ -144,6 +147,7 @@ function HomeScreen(props) {
                                 </View>
                             </View>
 
+                            {/* Categories */}
                             <FlatList
                                 refreshControl={
                                     <RefreshControl
@@ -156,7 +160,7 @@ function HomeScreen(props) {
                                 data={ingredients.length === 0 ? [{ blank: true }] : ingredients}
                                 keyExtractor={(item, index) => item.id}
                                 renderItem={({ item, index }) =>
-                                    <TouchableOpacity onPress={() => props.navigation.navigate('ingredientDetails', { item: item })} activeOpacity={0.9} style={{
+                                    <TouchableOpacity onPress={() => props.navigation.navigate('productScreen', { item: item })} activeOpacity={0.9} style={{
                                         margin: RFPercentage(1),
                                         marginBottom: RFPercentage(1.5),
                                         marginRight: RFPercentage(2),
