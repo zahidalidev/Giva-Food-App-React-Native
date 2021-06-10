@@ -109,6 +109,7 @@ function ProductScreen(props) {
                             <View style={{ flexDirection: 'column', marginTop: RFPercentage(1) }} >
                                 <View style={{ width: "90%" }} >
                                     <AppTextInput
+                                        autoFocus={true}
                                         placeHolder="Search for food"
                                         width="100%"
                                         value={searchValue}

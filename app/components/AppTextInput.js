@@ -5,7 +5,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 
 import colors from "../config/colors"
 
-function AppTextInput({ elevation = 0, borderColor = colors.primary, rightIcon = false, rightFunction, borderWidth = 0, placeHolder, value, onChange, width = "100%", height = RFPercentage(6), icon, fontWeight, rightButtonText, secure = false, iconType = "MaterialCommunityIcons", editable = true, startEdit, endEdit, border = false }) {
+function AppTextInput({ autoFocus = false, elevation = 0, borderColor = colors.primary, rightIcon = false, rightFunction, borderWidth = 0, placeHolder, value, onChange, width = "100%", height = RFPercentage(6), icon, fontWeight, rightButtonText, secure = false, iconType = "MaterialCommunityIcons", editable = true, startEdit, endEdit, border = false }) {
     const [eyeIcon, setEyeIcon] = useState(false)
 
     return (
@@ -29,6 +29,7 @@ function AppTextInput({ elevation = 0, borderColor = colors.primary, rightIcon =
                     onChangeText={(text) => onChange(text)}
                     onResponderStart={startEdit}
                     onSubmitEditing={endEdit}
+                    autoFocus
                 />
 
                 {secure ?
