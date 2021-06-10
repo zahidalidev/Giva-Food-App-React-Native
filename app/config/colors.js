@@ -9,5 +9,6 @@ export default {
     danger: "#ff5252",
     lightGrey: "#efefef",
     mediumGrey: "#b2b2b2",
-    grey: "#808080"
+    grey: "#808080",
+    danger: "#d62f2f"
 }

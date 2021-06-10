@@ -158,7 +158,7 @@ function HomeScreen(props) {
                                 showsVerticalScrollIndicator={false}
                                 numColumns={2}
                                 data={ingredients.length === 0 ? [{ blank: true }] : ingredients}
-                                keyExtractor={(item, index) => item.id}
+                                keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item, index }) =>
                                     <TouchableOpacity onPress={() => props.navigation.navigate('productScreen', { item: item })} activeOpacity={0.9} style={{
                                         margin: RFPercentage(1),

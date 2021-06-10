@@ -13,6 +13,7 @@ import RegisterScreen from "./app/screeens/RegisterScreen"
 import HomeScreen from "./app/screeens/HomeScreen"
 import ProductScreen from "./app/screeens/ProductScreen"
 import ProductDetailsScreen from "./app/screeens/ProductDetailsScreen"
+import CartScreen from "./app/screeens/CartScreen"
 
 import colors from "./app/config/colors"
 
@@ -40,13 +41,14 @@ export default function App() {
           open: config,
           close: config,
         },
-      }} initialRouteName='loginScreen' drawerType="front" overlayColor="transparent" edgeWidth={100}
+      }} initialRouteName='cartScreen' drawerType="front" overlayColor="transparent" edgeWidth={100}
       >
         <Stack.Screen name="loginScreen" >{(props) => <LoginScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="registerScreen" >{(props) => <RegisterScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="homeScreen" >{(props) => <HomeScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="productScreen" >{(props) => <ProductScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="productDetailsScreen" >{(props) => <ProductDetailsScreen {...props} />}</Stack.Screen>
+        <Stack.Screen name="cartScreen" >{(props) => <CartScreen {...props} />}</Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
