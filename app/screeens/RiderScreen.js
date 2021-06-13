@@ -219,7 +219,7 @@ function RiderScreen(props) {
                                         keyExtractor={(item, index) => index.toString()}
                                         renderItem={({ item, index }) => {
                                             return (item.taken && !item.confirm) ?
-                                                <TouchableOpacity onPress={() => handlePress(item)} onLongPress={() => handleLongPress(item)} activeOpacity={0.7} style={{
+                                                <TouchableOpacity activeOpacity={0.7} style={{
                                                     margin: RFPercentage(1),
                                                     marginLeft: "6%",
                                                     backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",

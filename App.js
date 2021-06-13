@@ -44,7 +44,7 @@ export default function App() {
           open: config,
           close: config,
         },
-      }} initialRouteName='riderScreen'
+      }} initialRouteName='profileScreen'
       >
         <Stack.Screen name="riderScreen" >{(props) => <RiderScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="profileScreen" >{(props) => <ProfileScreen {...props} />}</Stack.Screen>

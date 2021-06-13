@@ -17,7 +17,7 @@ function OrderCard({ index, title, description, price, image, showConfirm, showT
                 <Text numberOfLines={1} style={{ color: colors.grey, fontSize: RFPercentage(1.8) }} >{description}</Text>
 
                 <View style={{ position: "absolute", bottom: 0, alignItems: "center", marginTop: RFPercentage(1), flexDirection: "row", justifyContent: "space-between" }} >
-                    <View style={{ width: "100%", alignItems: "center", justifyContent: "space-evenly", flexDirection: "row", marginRight: RFPercentage(2) }} >
+                    <View style={{ width: showTaken ? "100%" : (showConfirm ? "75%" : "50%"), alignItems: "center", justifyContent: "space-evenly", flexDirection: "row", marginRight: RFPercentage(2) }} >
                         {
                             showConfirm ?
                                 <TouchableOpacity onPress={() => onConfirm()} activeOpacity={0.7} style={{ backgroundColor: colors.secondary, borderWidth: 1, padding: RFPercentage(0.4), paddingLeft: RFPercentage(1.4), paddingRight: RFPercentage(1.4), borderColor: colors.lightGrey }} >

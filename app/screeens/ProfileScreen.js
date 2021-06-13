@@ -118,7 +118,20 @@ function ProfileScreen(props) {
                             </View>
                         )}
 
+                        {/* SignUp button */}
+                        <View style={{ marginTop: RFPercentage(6), width: "85%", flex: 1, alignItems: "flex-end" }} >
+                            <AppTextButton
+                                name="Upate Profile"
+                                borderRadius={RFPercentage(1.3)}
+                                onSubmit={() => handleSubmit()}
+                                backgroundColor={colors.primary}
+                                width="100%"
+                                height={RFPercentage(5.5)}
+                            />
+                        </View>
                     </View>
+
+
 
                 </>
             }
