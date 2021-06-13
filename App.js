@@ -15,7 +15,7 @@ import ProductScreen from "./app/screeens/ProductScreen"
 import ProductDetailsScreen from "./app/screeens/ProductDetailsScreen"
 import CartScreen from "./app/screeens/CartScreen"
 import ProfileScreen from "./app/screeens/ProfileScreen"
-import OrdersScreen from "./app/screeens/OrdersScreen"
+import RiderScreen from "./app/screeens/RiderScreen"
 
 import colors from "./app/config/colors"
 import AppDrawer from './app/components/AppDrawer';
@@ -44,9 +44,9 @@ export default function App() {
           open: config,
           close: config,
         },
-      }} initialRouteName='loginScreen'
+      }} initialRouteName='riderScreen'
       >
-        <Stack.Screen name="ordersScreen" >{(props) => <OrdersScreen {...props} />}</Stack.Screen>
+        <Stack.Screen name="riderScreen" >{(props) => <RiderScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="profileScreen" >{(props) => <ProfileScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="loginScreen" >{(props) => <LoginScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="registerScreen" >{(props) => <RegisterScreen {...props} />}</Stack.Screen>
