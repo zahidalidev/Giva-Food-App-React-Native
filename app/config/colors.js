@@ -2,6 +2,7 @@ export default {
     primary: "#ffc244",
     secondary: "#008169",
     lightSecondary: "rgba(0, 129, 105, 0.1)",
+    lightPrimary: "rgba(255, 194, 68, 0.1)",
     black: "#000",
     white: "#fff",
     medium: "#6e6969",
