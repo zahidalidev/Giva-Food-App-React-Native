@@ -25,7 +25,7 @@ function ProductDetailsScreen(props) {
     )
 
     const addToCart = () => {
-
+        props.navigation.navigate('cartScreen')
     }
 
     return (

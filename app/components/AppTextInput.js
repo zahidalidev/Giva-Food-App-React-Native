@@ -29,7 +29,7 @@ function AppTextInput({ autoFocus = false, elevation = 0, borderColor = colors.p
                     onChangeText={(text) => onChange(text)}
                     onResponderStart={startEdit}
                     onSubmitEditing={endEdit}
-                    autoFocus
+                    autoFocus={autoFocus}
                 />
 
                 {secure ?

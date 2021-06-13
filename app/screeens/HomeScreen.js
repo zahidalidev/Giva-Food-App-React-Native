@@ -102,9 +102,9 @@ function HomeScreen(props) {
         <>
             <StatusBar style="light" backgroundColor={colors.primary} />
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
-                <Appbar.Action color={colors.white} icon="format-align-left" onPress={() => { }} />
+                <Appbar.Action onPress={() => { }} color={colors.white} icon="format-align-left" />
                 <Appbar.Content color={colors.white} title="Home" />
-                <Appbar.Action color={colors.white} icon="account-circle" onPress={() => { }} />
+                <Appbar.Action onPress={() => props.navigation.navigate('profileScreen')} color={colors.white} icon="account-circle" />
             </Appbar.Header>
             <View style={styles.container}>
 
