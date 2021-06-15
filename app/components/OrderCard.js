@@ -4,7 +4,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 
 import colors from '../config/colors';
 
-function OrderCard({ index, title, description, price, image, showConfirm, showTaken, showDelete, onConfirm, onTaken, onDelete }) {
+function OrderCard({ showCompletedBtn = false, index, title, description, price, image, showConfirm, showTaken, showDelete, onConfirm, onTaken, onDelete }) {
     return (
         <View key={index} style={{ flexDirection: "row", width: "100%", flex: 1 }} >
             <Image resizeMode="cover" source={{ uri: image }} style={{ borderRadius: RFPercentage(1.5), width: "27%", height: "100%" }} />
@@ -17,11 +17,18 @@ function OrderCard({ index, title, description, price, image, showConfirm, showT
                 <Text numberOfLines={1} style={{ color: colors.grey, fontSize: RFPercentage(1.8) }} >{description}</Text>
 
                 <View style={{ position: "absolute", bottom: 0, alignItems: "center", marginTop: RFPercentage(1), flexDirection: "row", justifyContent: "space-between" }} >
-                    <View style={{ width: showTaken ? "100%" : (showConfirm ? "75%" : "50%"), alignItems: "center", justifyContent: "space-evenly", flexDirection: "row", marginRight: RFPercentage(2) }} >
+                    <View style={{ width: showTaken ? "100%" : (showConfirm ? "75%" : "50%"), width: showCompletedBtn ? "70%" : null, alignItems: "center", justifyContent: "space-evenly", flexDirection: "row", marginRight: RFPercentage(2) }} >
                         {
                             showConfirm ?
                                 <TouchableOpacity onPress={() => onConfirm()} activeOpacity={0.7} style={{ backgroundColor: colors.secondary, borderWidth: 1, padding: RFPercentage(0.4), paddingLeft: RFPercentage(1.4), paddingRight: RFPercentage(1.4), borderColor: colors.lightGrey }} >
                                     <Text style={{ fontSize: RFPercentage(2), color: colors.white }} >Confirm</Text>
+                                </TouchableOpacity>
+                                : null
+                        }
+                        {
+                            showCompletedBtn ?
+                                <TouchableOpacity onPress={() => onConfirm()} activeOpacity={0.7} style={{ backgroundColor: colors.secondary, borderWidth: 1, padding: RFPercentage(0.8), paddingLeft: RFPercentage(1.4), paddingRight: RFPercentage(1.4), borderColor: colors.lightGrey }} >
+                                    <Text style={{ fontSize: RFPercentage(2), color: colors.white }} >Mark Complete</Text>
                                 </TouchableOpacity>
                                 : null
                         }
