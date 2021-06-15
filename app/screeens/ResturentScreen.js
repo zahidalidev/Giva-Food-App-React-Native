@@ -17,7 +17,6 @@ function ResturentScreen(props) {
     const [oldProducts, setOldProducts] = useState([]);
     const [activityIndic, setActivityIndic] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-    const [activeComponent, setActiveComponent] = useState('newOrder');
 
     const [products, setProducts] = useState([
         {
@@ -114,7 +113,7 @@ function ResturentScreen(props) {
             <StatusBar style="light" backgroundColor={colors.primary} />
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
                 <Appbar.Action color={colors.white} icon="format-align-left" onPress={() => { }} />
-                <Appbar.Content color={colors.white} title="Orders" />
+                <Appbar.Content color={colors.white} title="Resturent Orders" />
             </Appbar.Header>
             <View style={styles.container}>
                 {activityIndic
@@ -124,13 +123,6 @@ function ResturentScreen(props) {
                     : <>
                         {/* Bottom Contaienr */}
                         <View style={{ flexDirection: 'column', marginTop: RFPercentage(2), borderTopLeftRadius: RFPercentage(8), backgroundColor: colors.white, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
-
-                            {/* buttons */}
-                            <View style={{ flexDirection: 'row', marginTop: RFPercentage(1), backgroundColor: colors.primary }} >
-                                <TouchableOpacity onPress={() => setActiveComponent('newOrder')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "80%", padding: RFPercentage(2), backgroundColor: colors.secondary }} >
-                                    <Text style={{ color: colors.white, fontSize: RFPercentage(2.3) }} >Resturent Orders</Text>
-                                </TouchableOpacity>
-                            </View>
 
                             <FlatList
                                 refreshControl={
