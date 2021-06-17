@@ -21,6 +21,7 @@ import AdminScreen from "./app/screeens/AdminScreen"
 
 import colors from "./app/config/colors"
 import AppDrawer from './app/components/AppDrawer';
+import Notification from './app/components/common/Notification';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -46,18 +47,19 @@ export default function App() {
           open: config,
           close: config,
         },
-      }} initialRouteName='adminScreen'
+      }} initialRouteName='notification'
       >
-        <Stack.Screen name="riderScreen" >{(props) => <RiderScreen {...props} />}</Stack.Screen>
-        <Stack.Screen name="profileScreen" >{(props) => <ProfileScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="loginScreen" >{(props) => <LoginScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="registerScreen" >{(props) => <RegisterScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="homeScreen" >{(props) => <HomeScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="productScreen" >{(props) => <ProductScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="productDetailsScreen" >{(props) => <ProductDetailsScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="cartScreen" >{(props) => <CartScreen {...props} />}</Stack.Screen>
+        <Stack.Screen name="profileScreen" >{(props) => <ProfileScreen {...props} />}</Stack.Screen>
+        <Stack.Screen name="riderScreen" >{(props) => <RiderScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="resturentScreen" >{(props) => <ResturentScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="adminScreen" >{(props) => <AdminScreen {...props} />}</Stack.Screen>
+        <Stack.Screen name="notification" >{(props) => <Notification {...props} />}</Stack.Screen>
       </Stack.Navigator>
     );
   }

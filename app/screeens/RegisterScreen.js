@@ -55,35 +55,35 @@ function RegisterScreen(props) {
     }
 
     const handleSubmit = async () => {
-        // const body = {
-        //     name: `${feilds[0].value} ${feilds[1].value}`,
-        //     email: feilds[2].value,
-        //     password: feilds[3].value
-        // }
+        const body = {
+            name: `${feilds[0].value.trim()} ${feilds[1].value.trim()}`,
+            email: feilds[2].value.trim(),
+            password: feilds[3].value.trim()
+        }
 
-        // if (body.password !== feilds[4].value) {
-        //     toastify.error("Password and Confirm password are not same");
-        //     return;
-        // }
+        if (body.password !== feilds[4].value) {
+            toastify.error("Password and Confirm password are not same");
+            return;
+        }
 
-        // if (body.name === '' || body.email === '' || body.password === '') {
-        //     toastify.error("Please fill all the feilds");
-        //     return;
-        // }
+        if (body.name === '' || body.email === '' || body.password === '') {
+            toastify.error("Please fill all the feilds");
+            return;
+        }
 
-        // setIndicator(true);
+        setIndicator(true);
 
-        // try {
-        //     await registerUser(body);
-        //     setIndicator(false);
-        //     toastify.success("Registration Successful");
-        //     setTimeout(() => {
-        //         props.navigation.navigate('login')
-        //     }, 2000)
-        // } catch (error) {
-        //     toastify.error("Registration Failed");
-        //     setIndicator(false);
-        // }
+        try {
+            await registerUser(body);
+            setIndicator(false);
+            toastify.success("Registration Successful");
+            setTimeout(() => {
+                props.navigation.navigate('login')
+            }, 2000)
+        } catch (error) {
+            toastify.error("Registration Failed");
+            setIndicator(false);
+        }
     }
 
     return (
