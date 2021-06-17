@@ -5,17 +5,19 @@ import Constants from 'expo-constants'
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from "toastify-react-native";
+import * as Notifications from 'expo-notifications';
 
 import AppTextInput from '../components/AppTextInput';
 import colors from '../config/colors';
 import AppTextButton from '../components/AppTextButton';
 
 // import logo from "../../assets/images/kitchenLogo.gif"
-// import { loginUser } from '../services/userService';
+import { loginUser } from '../services/UserServices';
 import { useEffect } from 'react';
 import AccountText from '../components/common/AccountText';
 
 function LoginScreen(props) {
+    const [notificationToken, setNotificationToken] = useState(false);
     const [indicator, setIndicator] = useState(false);
     const [toastify, setToastify] = useState();
     const [feilds, setFeilds] = useState([
@@ -39,38 +41,77 @@ function LoginScreen(props) {
         setFeilds(tempFeilds);
     }
 
-    const handleSubmit = async () => {
-        // const email = feilds[0].value;
-        // const password = feilds[1].value;
-        // try {
-        //     setIndicator(true)
-        //     const { data } = await loginUser(email, password);
-        //     await AsyncStorage.setItem('token', data.id.toString());
-        //     setIndicator(false)
-        props.navigation.navigate('homeScreen')
-        // } catch (error) {
-        //     console.log("login error: ", error);
-        //     setIndicator(false)
-        //     toastify.error("Login Error");
-        // }
+    // get notification token
+    async function registerForPushNotificationsAsync() {
+        let token;
+        if (Constants.isDevice) {
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            token = (await Notifications.getExpoPushTokenAsync()).data;
+            console.log(Platform.OS, "  ", token);
+        } else {
+            alert('Must use physical device for Push Notifications');
+        }
+
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+
+        setNotificationToken(token)
     }
 
-    // get token from AsyncStorage to confirm login or logout
-    let validateWithToken = async () => {
-        // await AsyncStorage.removeItem('token');
-        // try {
-        //     let res = await AsyncStorage.getItem('token');
-        //     if (res) {
-        //         props.navigation.navigate('home')
-        //         return;
-        //     }
-        //     props.navigation.navigate('login');
-        // } catch (error) {
-        // }
+    const handleSubmit = async () => {
+        const email = feilds[0].value.trim().toLowerCase();
+        const password = feilds[1].value;
+        try {
+            setIndicator(true)
+            const res = await loginUser(email, password, notificationToken);
+            if (!res) {
+                setIndicator(false)
+                toastify.error("Login Error");
+                return;
+            }
+            await AsyncStorage.setItem('user', JSON.stringify(res));
+            setIndicator(false)
+            props.navigation.navigate('homeScreen')
+        } catch (error) {
+            console.log("login error: ", error);
+            setIndicator(false)
+            toastify.error("Login Error");
+        }
+    }
+
+    // get user from AsyncStorage to confirm login or logout
+    let validateCurrentUser = async () => {
+        // await AsyncStorage.removeItem('user');
+        try {
+            let res = await AsyncStorage.getItem('user');
+            if (res) {
+                props.navigation.navigate('homeScreen')
+                return;
+            }
+            props.navigation.navigate('loginScreen');
+        } catch (error) {
+            console.log("auto login: ", error)
+        }
     }
 
     useEffect(() => {
-        // validateWithToken();
+        registerForPushNotificationsAsync()
+        validateCurrentUser();
     }, [props.route.params]);
 
     return (

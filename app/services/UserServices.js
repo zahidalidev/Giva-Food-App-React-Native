@@ -12,19 +12,34 @@ const userRef = firestore.collection('users')
 
 
 export const addUser = async (body) => {
-    return await userRef.add(body);
+    const snapshot = await userRef.where('email', '==', body.email).get();
+    if (snapshot.empty) {
+        return await userRef.add(body);
+    }
+    return false;
 }
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (email, password, notificationToken) => {
     const snapshot = await userRef.where('email', '==', email).where('password', '==', password).get();
     if (snapshot.empty) {
         return false;
     }
 
-    let res = []
+    let res = ''
+    let id = '';
     snapshot.forEach(doc => {
-        res.push(doc.data())
+        res = doc.data()
+        id = doc.id
     });
 
-    return res[0]
+    if (res.role === 'admin' || res.role === 'rider' || res.role === 'resturent') {
+        try {
+            await userRef.doc(id).update({ notificationToken: notificationToken })
+            return res
+        } catch (error) {
+            return false
+        }
+    }
+
+
 }

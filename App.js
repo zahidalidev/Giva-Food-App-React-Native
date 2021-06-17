@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, LogBox, ImagePropTypes } from 'react-native';
+import { StyleSheet, LogBox } from 'react-native';
 import { RFPercentage } from "react-native-responsive-fontsize"
 import AnimatedSplash from "react-native-animated-splash-screen";
 import { createDrawerNavigator } from "@react-navigation/drawer"
@@ -26,6 +26,8 @@ import Notification from './app/components/common/Notification';
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
+LogBox.ignoreLogs(['Setting a timer']);
+
 export default function App() {
   const config = {
     animation: 'timing',
@@ -47,7 +49,7 @@ export default function App() {
           open: config,
           close: config,
         },
-      }} initialRouteName='notification'
+      }} initialRouteName='loginScreen'
       >
         <Stack.Screen name="loginScreen" >{(props) => <LoginScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="registerScreen" >{(props) => <RegisterScreen {...props} />}</Stack.Screen>

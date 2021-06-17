@@ -7,7 +7,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import AppTextInput from '../components/AppTextInput';
 import colors from '../config/colors';
 import AppTextButton from '../components/AppTextButton';
-// import { registerUser } from '../services/userService';
+import { addUser } from '../services/UserServices';
 import Toast from 'toastify-react-native';
 import AccountText from '../components/common/AccountText';
 
@@ -55,14 +55,19 @@ function RegisterScreen(props) {
     }
 
     const handleSubmit = async () => {
+        const highestTimeoutId = setTimeout(() => ';');
+        for (let i = 0; i < highestTimeoutId; i++) {
+            clearTimeout(i);
+        }
+
         const body = {
             name: `${feilds[0].value.trim()} ${feilds[1].value.trim()}`,
-            email: feilds[2].value.trim(),
+            email: feilds[2].value.trim().toLowerCase(),
             password: feilds[3].value.trim()
         }
 
         if (body.password !== feilds[4].value) {
-            toastify.error("Password and Confirm password are not same");
+            toastify.error("Check Password and Confirm Password");
             return;
         }
 
@@ -74,12 +79,20 @@ function RegisterScreen(props) {
         setIndicator(true);
 
         try {
-            await registerUser(body);
+            const res = await addUser(body);
+            if (!res) {
+                toastify.error("Registration Failed");
+                setIndicator(false);
+                return;
+            }
+
             setIndicator(false);
             toastify.success("Registration Successful");
+
             setTimeout(() => {
-                props.navigation.navigate('login')
+                props.navigation.navigate('loginScreen')
             }, 2000)
+
         } catch (error) {
             toastify.error("Registration Failed");
             setIndicator(false);
@@ -88,9 +101,9 @@ function RegisterScreen(props) {
 
     return (
         <View style={styles.container}>
-            <StatusBar style="light" backgroundColor={colors.primary} />
+            <StatusBar position="bottom" style="light" backgroundColor={colors.primary} />
 
-            <Toast ref={(t) => setToastify(t)} />
+            <Toast style={{ fontSize: 10 }} ref={(t) => setToastify(t)} />
             {/* Kitchen buddy top container */}
             <View style={{ backgroundColor: colors.primary, flex: 0.6, width: "100%", flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
                 <Text style={{ marginBottom: RFPercentage(5), color: colors.white, fontSize: Platform.OS === "ios" ? RFPercentage(4) : RFPercentage(6.5) }} >Sign Up</Text>
