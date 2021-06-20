@@ -91,8 +91,8 @@ function HomeScreen(props) {
 
     const handleLogout = async () => {
         try {
-            await AsyncStorage.removeItem('token');
-            props.navigation.navigate('login')
+            await AsyncStorage.removeItem('user');
+            props.navigation.navigate('loginScreen')
         } catch (error) {
             alert("Logout Error")
         }
@@ -121,9 +121,9 @@ function HomeScreen(props) {
         <>
             <StatusBar style="light" backgroundColor={colors.primary} />
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
-                <Appbar.Action onPress={() => { }} color={colors.white} icon="format-align-left" />
-                <Appbar.Content color={colors.white} title="Home" />
                 <Appbar.Action onPress={() => handleProfiles()} color={colors.white} icon="account-circle" />
+                <Appbar.Content color={colors.white} title="Home" />
+                <Appbar.Action onPress={() => handleLogout()} color={colors.white} icon="import" />
             </Appbar.Header>
             <View style={styles.container}>
 

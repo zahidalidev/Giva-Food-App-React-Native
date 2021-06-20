@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import { Text, RefreshControl, ActivityIndicator, Dimensions, FlatList, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, RefreshControl, ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
+import Toast from "toastify-react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import ReactNativeCrossPicker from "react-native-cross-picker"
 
 // config
 import AppTextInput from '../components/AppTextInput';
 import colors from '../config/colors';
 import AppTextButton from '../components/AppTextButton';
 
+//services
+import { addCategory, getCategories } from '../services/CategoryServices';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 // new Order = !item.taken
 // taken = taken && !confirm
 // confirm = item.confirm
@@ -20,6 +26,18 @@ function AdminScreen(props) {
     const [activeComponent, setActiveComponent] = useState('product');
     const [imageSelected, setImageSelected] = useState(false);
     const [image, setImage] = useState(false);
+    const [toastify, setToastify] = useState();
+    const [category, setCategory] = useState('');
+    const [selectedCategory, setDropCategory] = useState('')
+    const [allCategories, setAllCategories] = useState([])
+
+    const iconComponent = () => {
+        return <MaterialCommunityIcons
+            name={"chevron-down"}
+            size={20}
+            color={"grey"}
+        />
+    }
 
     const [foodFeils, setFoodFeils] = useState([
         {
@@ -40,13 +58,6 @@ function AdminScreen(props) {
 
     ]);
 
-    const [category, setCategory] = useState([
-        {
-            id: 0,
-            placeHolder: "Title",
-            value: '',
-        }
-    ]);
 
     const [ridersfeilds, setRidersFeilds] = useState([
         {
@@ -90,6 +101,26 @@ function AdminScreen(props) {
         }
     ]);
 
+    const getAllCategories = async () => {
+        try {
+            let categoryRef = await getCategories();
+
+            await categoryRef.onSnapshot((querySnapshot) => {
+                querySnapshot.docChanges().map(({ doc }) => {
+                    setAllCategories([...allCategories, doc.data()])
+                })
+            })
+
+            setAllCategories(res)
+        } catch (error) {
+            toastify.error("Categories not found please add them");
+            console.log("Categories found: ", error)
+        }
+    }
+    useEffect(() => {
+        getAllCategories()
+    }, [])
+
     const uploadImages = async () => {
         try {
             await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -112,14 +143,48 @@ function AdminScreen(props) {
         }
     }
 
+    const handleLogout = async () => {
+        try {
+            await AsyncStorage.removeItem('user');
+            props.navigation.navigate('loginScreen')
+        } catch (error) {
+            alert("Logout Error")
+        }
+    }
+
+    const handleCategory = async () => {
+        if (category === '') {
+            toastify.error("Title is empty")
+            return;
+        }
+        try {
+            const res = await addCategory(category)
+            if (res) {
+                toastify.success("Category Added")
+            } else {
+                toastify.error("Something went wrong!")
+            }
+        } catch (error) {
+            console.log("category add: ", error)
+        }
+    }
+
+    const handleProduct = async () => {
+
+    }
+
     return (
         <>
             <StatusBar style="light" backgroundColor={colors.primary} />
 
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
-                <Appbar.Action color={colors.white} icon="format-align-left" onPress={() => { }} />
+                <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('profileScreen')} />
                 <Appbar.Content color={colors.white} title="Admin Panel" />
+                <Appbar.Action color={colors.white} icon="import" onPress={() => handleLogout()} />
             </Appbar.Header>
+
+            {/* toast component */}
+            <Toast ref={(c) => setToastify(c)} />
 
             <View style={styles.container}>
                 {activityIndic
@@ -164,6 +229,16 @@ function AdminScreen(props) {
                                             </View>
                                         )}
 
+                                        <ReactNativeCrossPicker
+                                            modalTextStyle={{ color: "rgb(0, 74, 173)" }}
+                                            mainComponentStyle={{ marginTop: RFPercentage(4), width: "85%", borderWidth: 0, backgroundColor: Colors.white }}
+                                            iconComponent={iconComponent}
+                                            items={allCategories}
+                                            setItem={setDropCategory} selectedItem={selectedCategory}
+                                            placeholder="Select Category"
+                                            modalMarginTop={"70%"} // popup model margin from the top 
+                                        />
+
                                         <TouchableOpacity onPress={() => uploadImages()} style={{ justifyContent: "flex-start", alignItems: "center", flexDirection: "row", marginTop: RFPercentage(4), width: "85%", }} >
                                             <View style={{ borderRadius: RFPercentage(1.3), backgroundColor: colors.mediumSecondary, width: "50%", height: RFPercentage(6), justifyContent: "center", alignItems: "center" }} >
                                                 <Text style={{ color: colors.white, fontSize: RFPercentage(2.3) }} >Upload Image</Text>
@@ -179,7 +254,7 @@ function AdminScreen(props) {
                                             <AppTextButton
                                                 name="Add Item"
                                                 borderRadius={RFPercentage(1.3)}
-                                                onSubmit={() => handleSubmit()}
+                                                onSubmit={() => handleProduct()}
                                                 backgroundColor={colors.primary}
                                                 width="100%"
                                                 height={RFPercentage(5.5)}
@@ -192,24 +267,21 @@ function AdminScreen(props) {
                                 activeComponent === 'category' ?
                                     <View style={{ marginTop: RFPercentage(2), backgroundColor: colors.lightGrey, width: "100%", flex: 1.8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
                                         {/* Text feilds */}
-                                        {category.map((item, i) =>
-                                            <View key={i} style={{ marginTop: i == 0 ? RFPercentage(6) : RFPercentage(4), width: "85%" }} >
-                                                <AppTextInput
-                                                    placeHolder={item.placeHolder}
-                                                    width="100%"
-                                                    value={item.value}
-                                                    onChange={(text) => handleChange(text, item.id)}
-                                                    secure={item.secure}
-                                                />
-                                            </View>
-                                        )}
+                                        <View style={{ marginTop: RFPercentage(6), width: "85%" }} >
+                                            <AppTextInput
+                                                placeHolder="Category Title"
+                                                width="100%"
+                                                value={category}
+                                                onChange={(text) => setCategory(text)}
+                                            />
+                                        </View>
 
                                         {/* Add Item Button */}
                                         <View style={{ marginTop: RFPercentage(5), width: "85%", flex: 1, alignItems: "flex-end" }} >
                                             <AppTextButton
                                                 name="Add Category"
                                                 borderRadius={RFPercentage(1.3)}
-                                                onSubmit={() => handleSubmit()}
+                                                onSubmit={() => handleCategory()}
                                                 backgroundColor={colors.primary}
                                                 width="100%"
                                                 height={RFPercentage(5.5)}
