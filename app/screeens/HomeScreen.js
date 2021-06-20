@@ -98,13 +98,32 @@ function HomeScreen(props) {
         }
     }
 
+    const handleProfiles = async () => {
+        try {
+            let currentUser = await AsyncStorage.getItem('user');
+            currentUser = JSON.parse(currentUser);
+            if (currentUser) {
+                if (currentUser.role === 'admin') {
+                    props.navigation.navigate('adminScreen')
+                } else if (currentUser.role === 'rider') {
+                    props.navigation.navigate('riderScreen')
+                } else {
+                    props.navigation.navigate('profileScreen')
+                }
+            }
+
+        } catch (error) {
+            console.log("roles: ", error)
+        }
+    }
+
     return (
         <>
             <StatusBar style="light" backgroundColor={colors.primary} />
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
                 <Appbar.Action onPress={() => { }} color={colors.white} icon="format-align-left" />
                 <Appbar.Content color={colors.white} title="Home" />
-                <Appbar.Action onPress={() => props.navigation.navigate('profileScreen')} color={colors.white} icon="account-circle" />
+                <Appbar.Action onPress={() => handleProfiles()} color={colors.white} icon="account-circle" />
             </Appbar.Header>
             <View style={styles.container}>
 
