@@ -25,131 +25,34 @@ function getDateString() {
 }
 
 export const addCategory = async (title, uri) => {
-    // let imagePath = `givaAssets/${getDateString()}.png`;
-    // let storageRef = firebase.storage().ref(imagePath)
-    // var storage = firebase.storage();
-    // var storageRef = storage.ref(imagePath);
-
-    // imagesRef = spaceRef.parent;
-    // let reference = storage().ref();
-
-    // var uploadTask = storageRef.child('images/rivers.jpg').put(categoryImage);
-
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
-    // Create a root reference
-    // var storageRef = firebase.storage().ref();
-
-    // // Create a reference to 'mountains.jpg'
-    // var mountainsRef = storageRef.child('mountains.jpg');
-
-    // // Create a reference to 'images/mountains.jpg'
-    // var mountainImagesRef = storageRef.child('images/mountains.jpg');
-
-    // // While the file names are the same, the references point to different files
-    // mountainsRef.name === mountainImagesRef.name;           // true
-    // mountainsRef.fullPath === mountainImagesRef.fullPath;
-
-    // const storage = getStorage();
-    // const storageRef = ref(storage, 'some-child');
-
-    // firebase.storage().ref('givaAssets/naasazadme.text').putString(categoryImage.base64).then(function (snapshot) {
-    //     console.log('Uploaded a base64 string!');
-    // }).catch(e => console.log(e));
-    // Why are we using XMLHttpRequest? See:
-    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
-    const blob = await new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            resolve(xhr.response);
-        };
-        xhr.onerror = function (e) {
-            console.log(e);
-            reject(new TypeError("Network request failed"));
-        };
-        xhr.responseType = "blob";
-        xhr.open("GET", uri, true);
-        xhr.send(null);
-    });
-
-    const ref = firebase.storage().ref().child(uuid.v4());
-    const snapshot = await ref.put(blob);
-
-    // We're done with the blob, close and release it
-    blob.close();
-
-    const resahgs = await snapshot.ref.getDownloadURL();
-    console.log(resahgs)
-
-    // firebase.storage().ref('givaAssets').child('file_name.png')
-    //     .putString(categoryImage.base64);
-    // console.log("new: ", categoryImage.base64)
-    // firebase.storage().ref().child('givaAssets').putString(categoryImage.base64, 'base64', { contentType: 'image/jpg' })
-    // const message = 'This is my message.';
-    // uploadString(storageRef, message, 'base64').then((snapshot) => {
-    //     console.log('Uploaded a base64 string!');
-    // });
-
-
-    // let blob = uriToBlob(categoryImage.uri)
-    // console.log("tye: ", blob)
-
-    // storageRef.put(blob).then((snapshot) => {
-    //     console.log('Uploaded a base64 string!');
-    // }).catch(erro => console.log(erro));
-    // uploadTask.on('state_changed',
-    //     (snapshot) => {
-    //         // Observe state change events such as progress, pause, and resume
-    //         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-    //         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //         console.log('Upload is ' + progress + '% done');
-    //         switch (snapshot.state) {
-    //             case firebase.storage.TaskState.PAUSED: // or 'paused'
-    //                 console.log('Upload is paused');
-    //                 break;
-    //             case firebase.storage.TaskState.RUNNING: // or 'running'
-    //                 console.log('Upload is running');
-    //                 break;
-    //         }
-    //     },
-    //     (error) => {
-    //         // Handle unsuccessful uploads
-    //     },
-    //     () => {
-    //         // Handle successful uploads on complete
-    //         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-    //         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-    //             console.log('File available at', downloadURL);
-    //         });
-    //     }
-    // );
-
-
     try {
 
-        // const snapshot = await categoryRef.where('label', '==', title).get();
+        const snapshot = await categoryRef.where('label', '==', title).get();
         if (snapshot.empty) {
 
-            // storageRef.child(imagePath).put(categoryImage, {
-            //     contentType: 'image/jpeg'
-            // }).then((snapshot) => {
-            //     console.log('Image uploaded to the bucket!');
+            const blob = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                    resolve(xhr.response);
+                };
+                xhr.onerror = function (e) {
+                    console.log(e);
+                    reject(new TypeError("Network request failed"));
+                };
+                xhr.responseType = "blob";
+                xhr.open("GET", uri, true);
+                xhr.send(null);
+            });
 
-            // }).catch((error) => {
-            //     console.log(error);
-            // });
+            const ref = firebase.storage().ref().child(uuid.v4());
+            const snapshot = await ref.put(blob);
 
+            // We're done with the blob, close and release it
+            blob.close();
 
-            // let task = storageRef.put(categoryImage, 'base64')
-            // task.then(() => {
-            //     console.log('Image uploaded to the bucket!');
-            // }).catch((e) => {
-            //     console.log('uploading image error => ', e);
-            // });
+            const ImageUrl = await snapshot.ref.getDownloadURL();
 
-            // return await categoryRef.add({ label: title, value: title, imagePath });
+            return await categoryRef.add({ label: title, value: title, ImageUrl });
         }
         return false;
     } catch (error) {

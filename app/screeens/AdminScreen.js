@@ -155,24 +155,13 @@ function AdminScreen(props) {
 
             let pickerResult = await ImagePicker.launchImageLibraryAsync({
                 allowsEditing: true,
-                aspect: [4, 3],
-                // mediaTypes: "Images",
-                // base64: true
+                aspect: [3, 3],
+                quality: 0.7
             });
 
-            // let path = pickerResult.uri
-            // console.log("pickerResult2: ", path)
-            const { height, width, type, uri } = pickerResult;
-            // // const resBlob = uriToBlob(uri)
-            // // / creating formdata
-            // let data = new FormData();
-            // // Convert base 64 image to blob, otherwise model wont recognize
-            // const blob = await fetch(pickerResult).then((res) => res.blob());
-            // // const blob = imgSrc;
-            // data.append('regNumber', blob);
-            // // console.log(imgSrc);
 
-            // console.log("image picked ewnblob ", data);
+            const { height, width, type, uri } = pickerResult;
+
             if (evetnType == 'product') {
                 setImage(uri)
                 setImageSelected(true)
