@@ -37,10 +37,3 @@ export const getCategories = async () => {
     //     return categories;
     // })
 }
-
-// return await userRef.where('name', "==", "zahid").onSnapshot((querySnapshot) => {
-//     let groups = querySnapshot.docChanges().map(({ doc }) => {
-//         const group = doc.data();
-//         console.log(group);
-//     })
-// })

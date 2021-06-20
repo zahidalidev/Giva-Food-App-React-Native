@@ -16,9 +16,6 @@ import AppTextButton from '../components/AppTextButton';
 //services
 import { addCategory, getCategories } from '../services/CategoryServices';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-// new Order = !item.taken
-// taken = taken && !confirm
-// confirm = item.confirm
 
 function AdminScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
@@ -105,13 +102,33 @@ function AdminScreen(props) {
         try {
             let categoryRef = await getCategories();
 
-            await categoryRef.onSnapshot((querySnapshot) => {
-                querySnapshot.docChanges().map(({ doc }) => {
-                    setAllCategories([...allCategories, doc.data()])
-                })
-            })
+            let tempCategories = [...allCategories];
+            const observer = categoryRef.onSnapshot(querySnapshot => {
+                querySnapshot.docChanges().forEach(change => {
+                    if (change.type === 'added') {
+                        let newData = change.doc.data()
 
-            setAllCategories(res)
+                        let hasObject = []
+                        tempCategories.filter(item => {
+                            if (item.label === newData.label) {
+                                hasObject.push(true)
+                            }
+                        });
+
+                        if (!(hasObject.includes(true))) {
+                            tempCategories.push(change.doc.data())
+                            setAllCategories(tempCategories)
+                        }
+                    }
+                    if (change.type === 'modified') {
+                        console.log('Modified city: ', change.doc.data());
+                    }
+                    if (change.type === 'removed') {
+                        console.log('Removed city: ', change.doc.data());
+                    }
+                });
+            });
+
         } catch (error) {
             toastify.error("Categories not found please add them");
             console.log("Categories found: ", error)
