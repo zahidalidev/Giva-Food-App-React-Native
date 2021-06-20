@@ -16,13 +16,18 @@ import AppTextButton from '../components/AppTextButton';
 //services
 import { addCategory, getCategories } from '../services/CategoryServices';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { addProduct } from '../services/ProductServices';
 
 function AdminScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [activeComponent, setActiveComponent] = useState('product');
+
     const [imageSelected, setImageSelected] = useState(false);
     const [image, setImage] = useState(false);
+    const [categoryImage, setCategoryImage] = useState(false);
+    const [imageCategorySelected, setCategoryImageSelected] = useState(false);
+
     const [toastify, setToastify] = useState();
     const [category, setCategory] = useState('');
     const [selectedCategory, setDropCategory] = useState('')
@@ -36,7 +41,7 @@ function AdminScreen(props) {
         />
     }
 
-    const [foodFeils, setFoodFeils] = useState([
+    const [foodFeils, setFoodFields] = useState([
         {
             id: 0,
             placeHolder: "Title",
@@ -138,7 +143,7 @@ function AdminScreen(props) {
         getAllCategories()
     }, [])
 
-    const uploadImages = async () => {
+    const uploadImages = async (evetnType) => {
         try {
             await ImagePicker.requestMediaLibraryPermissionsAsync();
             let permissionResult = await ImagePicker.getMediaLibraryPermissionsAsync();
@@ -150,11 +155,31 @@ function AdminScreen(props) {
 
             let pickerResult = await ImagePicker.launchImageLibraryAsync({
                 allowsEditing: true,
-                base64: true,
+                aspect: [4, 3],
+                // mediaTypes: "Images",
+                // base64: true
             });
 
-            setImage(pickerResult)
-            setImageSelected(true)
+            // let path = pickerResult.uri
+            // console.log("pickerResult2: ", path)
+            const { height, width, type, uri } = pickerResult;
+            // // const resBlob = uriToBlob(uri)
+            // // / creating formdata
+            // let data = new FormData();
+            // // Convert base 64 image to blob, otherwise model wont recognize
+            // const blob = await fetch(pickerResult).then((res) => res.blob());
+            // // const blob = imgSrc;
+            // data.append('regNumber', blob);
+            // // console.log(imgSrc);
+
+            // console.log("image picked ewnblob ", data);
+            if (evetnType == 'product') {
+                setImage(uri)
+                setImageSelected(true)
+            } else {
+                setCategoryImage(uri)
+                setCategoryImageSelected(true)
+            }
         } catch (error) {
 
         }
@@ -175,7 +200,7 @@ function AdminScreen(props) {
             return;
         }
         try {
-            const res = await addCategory(category)
+            const res = await addCategory(category, categoryImage)
             if (res) {
                 toastify.success("Category Added")
             } else {
@@ -186,8 +211,43 @@ function AdminScreen(props) {
         }
     }
 
-    const handleProduct = async () => {
+    const handleChangeProduct = (text, index) => {
+        let tempFields = [...foodFeils];
+        tempFields[index].value = text;
+        setFoodFields(tempFields)
+    }
 
+    const handleProduct = async () => {
+        const title = foodFeils[0].value
+        const price = foodFeils[1].value
+        const description = foodFeils[2].value
+        const category = selectedCategory;
+
+        if (title === '' || price === '' || description === '' || category === '') {
+            toastify.error("All fields are required")
+            return;
+        }
+
+        let body = {
+            title,
+            price,
+            category,
+            description,
+            image: image
+        }
+
+        try {
+            const res = await addProduct(body)
+            if (!res) {
+                toastify.error("Product Not Added");
+                return;
+            }
+
+            toastify.success("Product Added");
+
+        } catch (error) {
+
+        }
     }
 
     return (
@@ -240,7 +300,7 @@ function AdminScreen(props) {
                                                     placeHolder={item.placeHolder}
                                                     width="100%"
                                                     value={item.value}
-                                                    onChange={(text) => handleChange(text, item.id)}
+                                                    onChange={(text) => handleChangeProduct(text, item.id)}
                                                     secure={item.secure}
                                                 />
                                             </View>
@@ -256,7 +316,7 @@ function AdminScreen(props) {
                                             modalMarginTop={"70%"} // popup model margin from the top 
                                         />
 
-                                        <TouchableOpacity onPress={() => uploadImages()} style={{ justifyContent: "flex-start", alignItems: "center", flexDirection: "row", marginTop: RFPercentage(4), width: "85%", }} >
+                                        <TouchableOpacity onPress={() => uploadImages("product")} style={{ justifyContent: "flex-start", alignItems: "center", flexDirection: "row", marginTop: RFPercentage(4), width: "85%", }} >
                                             <View style={{ borderRadius: RFPercentage(1.3), backgroundColor: colors.mediumSecondary, width: "50%", height: RFPercentage(6), justifyContent: "center", alignItems: "center" }} >
                                                 <Text style={{ color: colors.white, fontSize: RFPercentage(2.3) }} >Upload Image</Text>
                                             </View>
@@ -292,6 +352,16 @@ function AdminScreen(props) {
                                                 onChange={(text) => setCategory(text)}
                                             />
                                         </View>
+
+                                        <TouchableOpacity onPress={() => uploadImages("category")} style={{ justifyContent: "flex-start", alignItems: "center", flexDirection: "row", marginTop: RFPercentage(4), width: "85%", }} >
+                                            <View style={{ borderRadius: RFPercentage(1.3), backgroundColor: colors.mediumSecondary, width: "50%", height: RFPercentage(6), justifyContent: "center", alignItems: "center" }} >
+                                                <Text style={{ color: colors.white, fontSize: RFPercentage(2.3) }} >Upload Image</Text>
+                                            </View>
+                                            {imageCategorySelected ?
+                                                <Text style={{ marginLeft: RFPercentage(2), marginBottom: RFPercentage(1), color: colors.grey, fontSize: RFPercentage(1.8) }} >Image is Selected</Text>
+                                                : <Text style={{ marginLeft: RFPercentage(2), marginBottom: RFPercentage(1), color: colors.danger, fontSize: RFPercentage(1.8) }} >* Image is Not Selected</Text>
+                                            }
+                                        </TouchableOpacity>
 
                                         {/* Add Item Button */}
                                         <View style={{ marginTop: RFPercentage(5), width: "85%", flex: 1, alignItems: "flex-end" }} >
