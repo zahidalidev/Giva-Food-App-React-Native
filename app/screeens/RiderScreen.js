@@ -26,6 +26,27 @@ function RiderScreen(props) {
         setRefreshing(false);
     }, []);
 
+    const handleOrderTaken = async (index) => {
+        let tempOrders = [...products];
+        tempOrders[index].taken = true;
+        tempOrders[index].confirm = false;
+        setProducts(tempOrders)
+    }
+
+    const handleOrderConfirm = async (index) => {
+        let tempOrders = [...products];
+        tempOrders[index].taken = true;
+        tempOrders[index].confirm = true;
+        setProducts(tempOrders)
+    }
+
+    const handleOrderDelete = async (index) => {
+        let tempOrders = [...products];
+        let docId = tempOrders[index].docId;
+        tempOrders.splice(index, 1);
+        setProducts(tempOrders)
+    }
+
     useEffect(() => {
         getAllOrders()
     }, [])
@@ -106,7 +127,7 @@ function RiderScreen(props) {
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
-                                                        <OrderCard index={index} showConfirm={true} showTaken={true} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} details={item} />
+                                                        <OrderCard index={index} showConfirm={true} showTaken={true} showDelete={true} onConfirm={() => handleOrderConfirm(index)} onTaken={() => handleOrderTaken(index)} onDelete={() => handleOrderDelete(index)} details={item} />
                                                     }
                                                 </TouchableOpacity> : null
                                         }
@@ -134,11 +155,11 @@ function RiderScreen(props) {
                                                     backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
                                                     // maxHeight: item.blank ? 0 : null,
                                                     width: "100%",
-                                                    height: RFPercentage(20),
+                                                    // height: RFPercentage(20),
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
-                                                        <OrderCard index={index} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} details={item} />
+                                                        <OrderCard index={index} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => handleOrderTaken(index)} onDelete={() => handleOrderDelete(index)} details={item} />
                                                     }
                                                 </TouchableOpacity> : null
                                         }
@@ -167,11 +188,11 @@ function RiderScreen(props) {
                                                     backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
                                                     // maxHeight: item.blank ? 0 : null,
                                                     width: "100%",
-                                                    height: RFPercentage(20),
+                                                    // height: RFPercentage(20),
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
-                                                        <OrderCard index={index} showConfirm={true} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} details={item} />
+                                                        <OrderCard index={index} showConfirm={true} showDelete={true} onConfirm={() => handleOrderConfirm(index)} onTaken={() => handleOrderTaken(index)} onDelete={() => handleOrderDelete(index)} details={item} />
                                                     }
                                                 </TouchableOpacity> : null
                                         }
