@@ -32,7 +32,7 @@ export const loginUser = async (email, password, notificationToken) => {
         id = doc.id
     });
 
-    if (res.role === 'admin' || res.role === 'rider' || res.role === 'resturent') {
+    if (res.role === 'admin' || res.role === 'rider' || res.role === 'restaurant') {
         try {
             await userRef.doc(id).update({ notificationToken: notificationToken })
             return res

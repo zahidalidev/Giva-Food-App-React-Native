@@ -17,6 +17,7 @@ import AppTextButton from '../components/AppTextButton';
 import { addCategory, getCategories } from '../services/CategoryServices';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { addProduct } from '../services/ProductServices';
+import { addUser } from '../services/UserServices';
 
 function AdminScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
@@ -76,10 +77,20 @@ function AdminScreen(props) {
         },
         {
             id: 3,
+            placeHolder: "Contact Number",
+            value: '',
+        },
+        {
+            id: 4,
+            placeHolder: "Address",
+            value: '',
+        },
+        {
+            id: 5,
             placeHolder: "Password",
             value: '',
             secure: true
-        }
+        },
     ]);
 
     const [restaurantfeilds, setRestaurantFeilds] = useState([
@@ -97,11 +108,29 @@ function AdminScreen(props) {
         },
         {
             id: 3,
+            placeHolder: "Contact Number",
+            value: '',
+            secure: false
+        },
+        {
+            id: 4,
             placeHolder: "Password",
             value: '',
             secure: true
         }
     ]);
+
+    const handleRidersFields = (value, index) => {
+        let tempFields = [...ridersfeilds];
+        tempFields[index].value = value;
+        setRidersFeilds(tempFields)
+    }
+
+    const handleRestaurantFields = (value, index) => {
+        let tempFields = [...restaurantfeilds];
+        tempFields[index].value = value;
+        setRestaurantFeilds(tempFields)
+    }
 
     const getAllCategories = async () => {
         try {
@@ -154,9 +183,8 @@ function AdminScreen(props) {
             }
 
             let pickerResult = await ImagePicker.launchImageLibraryAsync({
-                allowsEditing: true,
-                aspect: [3, 3],
-                quality: 0.7
+                // allowsEditing: true,
+                quality: 0.6
             });
 
 
@@ -235,7 +263,42 @@ function AdminScreen(props) {
             toastify.success("Product Added");
 
         } catch (error) {
+            console.log("product added erro: ", error)
+        }
+    }
 
+    const handleEmploy = async (type) => {
+        let body = {};
+
+        if (type === 'rider') {
+            body = {
+                name: ridersfeilds[0].value,
+                email: ridersfeilds[1].value,
+                contactNumber: ridersfeilds[2].value,
+                address: ridersfeilds[3].value,
+                password: ridersfeilds[4].value,
+                role: "rider"
+            }
+        } else {
+            body = {
+                name: restaurantfeilds[0].value,
+                email: restaurantfeilds[1].value,
+                address: restaurantfeilds[2].value,
+                password: restaurantfeilds[3].value,
+                role: "restaurant"
+            }
+        }
+
+        try {
+            const res = await addUser(body);
+            if (!res) {
+                toastify.error("Rider Not Added !")
+                return;
+            }
+            toastify.success("Rider Added")
+
+        } catch (error) {
+            console.log("Rider add error: ", error)
         }
     }
 
@@ -376,7 +439,7 @@ function AdminScreen(props) {
                                                     placeHolder={item.placeHolder}
                                                     width="100%"
                                                     value={item.value}
-                                                    onChange={(text) => handleChange(text, item.id)}
+                                                    onChange={(text) => handleRidersFields(text, i)}
                                                     secure={item.secure}
                                                 />
                                             </View>
@@ -387,7 +450,7 @@ function AdminScreen(props) {
                                             <AppTextButton
                                                 name="Add Rider"
                                                 borderRadius={RFPercentage(1.3)}
-                                                onSubmit={() => handleSubmit()}
+                                                onSubmit={() => handleEmploy('rider')}
                                                 backgroundColor={colors.primary}
                                                 width="100%"
                                                 height={RFPercentage(5.5)}
@@ -406,7 +469,7 @@ function AdminScreen(props) {
                                                     placeHolder={item.placeHolder}
                                                     width="100%"
                                                     value={item.value}
-                                                    onChange={(text) => handleChange(text, item.id)}
+                                                    onChange={(text) => handleRestaurantFields(text, i)}
                                                     secure={item.secure}
                                                 />
                                             </View>
@@ -417,7 +480,7 @@ function AdminScreen(props) {
                                             <AppTextButton
                                                 name="Add Restaurant"
                                                 borderRadius={RFPercentage(1.3)}
-                                                onSubmit={() => handleSubmit()}
+                                                onSubmit={() => handleEmploy('restaurant')}
                                                 backgroundColor={colors.primary}
                                                 width="100%"
                                                 height={RFPercentage(5.5)}

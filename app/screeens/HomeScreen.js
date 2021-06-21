@@ -12,81 +12,73 @@ import CategoryCard from "../components/CategoryCard";
 
 // config
 import colors from '../config/colors';
-// import { getAllIngredients } from "../services/ingredientsService";
+import { getCategories } from '../services/CategoryServices';
+// import { getAllCategories } from "../services/CategoriesService";
 // import GetSqlDate from '../components/commmon/GetSqlDate';
 
 const windowWidth = Dimensions.get('window').width;
 
 function HomeScreen(props) {
     const [searchValue, setSearchValue] = useState('');
-    const [oldIngredients, setOldIngredients] = useState([]);
+    const [oldCategories, setOldCategories] = useState([]);
     const [activityIndic, setActivityIndic] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
-    const [ingredients, setIngredients] = useState([
-        {
-            id: 0,
-            title: "Burgers",
-            description: "This is description of Burgers",
-            image: "https://freepngimg.com/save/10721-burger-transparent/2400x2132",
-        },
-        {
-            id: 1,
-            title: "Pizzas",
-            description: "This is description of Pizzas",
-            image: "https://www.jing.fm/clipimg/full/208-2088472_pizza-no-background-kebab-pizza-png.png",
-        },
-        {
-            id: 2,
-            title: "Fries",
-            description: "This is description of Fries",
-            image: "https://www.freepnglogos.com/uploads/fries-png/premium-french-fries-photos-7.png",
-        },
-        {
-            id: 3,
-            title: "Burgers",
-            description: "This is description of Burgers",
-            image: "https://freepngimg.com/save/10721-burger-transparent/2400x2132",
-        },
-    ]);
+    const [categories, setCategories] = useState([]);
 
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setRefreshing(false);
-        // getIngredients();
+        getAllCategories();
     }, []);
 
     const handleSearch = () => {
-        // let temp = [...oldIngredients];
-        // let newIngredients = temp.map((ingredient) => {
-        //     if (ingredient.name.includes(searchValue)) {
-        //         return ingredient;
-        //     }
-        // })
-        // setIngredients(newIngredients);
+
     }
 
-    const getIngredients = async () => {
-        // try {
-        //     setActivityIndic(true)
-        //     const userId = await AsyncStorage.getItem('token');
-        //     const { data } = await getAllIngredients(userId);
-        //     const allIngredients = data.map(item => {
-        //         item.expirationDate = GetSqlDate(new Date(item.expirationDate));
-        //         return item;
-        //     })
-        //     setIngredients(allIngredients);
-        //     setOldIngredients(allIngredients);
-        // } catch (error) {
-        //     console.log("Error All ingredients: ", error)
-        // }
-        // setRefreshing(false)
-        // setActivityIndic(false);
+    const getAllCategories = async () => {
+
+        try {
+            setActivityIndic(true)
+            let categoryRef = await getCategories();
+
+            let tempCategories = [...categories];
+            const observer = categoryRef.onSnapshot(querySnapshot => {
+                querySnapshot.docChanges().forEach(change => {
+                    if (change.type === 'added') {
+                        let newData = change.doc.data()
+
+                        let hasObject = []
+                        tempCategories.filter(item => {
+                            if (item.label === newData.label) {
+                                hasObject.push(true)
+                            }
+                        });
+
+                        if (!(hasObject.includes(true))) {
+                            tempCategories.push(change.doc.data())
+                            setCategories(tempCategories)
+                        }
+                    }
+                    if (change.type === 'modified') {
+                        console.log('Modified city: ', change.doc.data());
+                    }
+                    if (change.type === 'removed') {
+                        console.log('Removed city: ', change.doc.data());
+                    }
+                });
+            });
+        } catch (error) {
+            // toastify.error("Categories not found please add them");
+            console.log("Categories found: ", error)
+        }
+        setRefreshing(false)
+        setActivityIndic(false);
     }
 
     useEffect(() => {
-        getIngredients();
+        getAllCategories();
     }, []);
 
     const handleLogout = async () => {
@@ -176,7 +168,7 @@ function HomeScreen(props) {
                                 style={{ marginTop: RFPercentage(5) }}
                                 showsVerticalScrollIndicator={false}
                                 numColumns={2}
-                                data={ingredients.length === 0 ? [{ blank: true }] : ingredients}
+                                data={categories.length === 0 ? [{ blank: true }] : categories}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item, index }) =>
                                     <TouchableOpacity onPress={() => props.navigation.navigate('productScreen', { item: item })} activeOpacity={0.9} style={{
@@ -197,7 +189,7 @@ function HomeScreen(props) {
                                         flexDirection: "column",
                                     }} >
                                         {item.blank ? null :
-                                            <CategoryCard index={index} title={item.title} image={item.image} />
+                                            <CategoryCard index={index} title={item.label} image={item.ImageUrl} />
                                         }
                                     </TouchableOpacity>
 

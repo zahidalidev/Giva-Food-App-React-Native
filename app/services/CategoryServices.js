@@ -13,17 +13,6 @@ if (firebase.apps.length === 0) {
 const firestore = firebase.firestore();
 const categoryRef = firestore.collection('categories')
 
-function getDateString() {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = `${date.getMonth() + 1}`.padStart(2, '0');
-    const day = `${date.getDate()}`.padStart(2, '0');
-    const hou = `${date.getHours()}`
-    const min = `${date.getMinutes()}`
-    const sec = `${date.getSeconds()}`
-    return `${year}${month}${day}${hou}${min}${sec}`
-}
-
 export const addCategory = async (title, uri) => {
     try {
 
