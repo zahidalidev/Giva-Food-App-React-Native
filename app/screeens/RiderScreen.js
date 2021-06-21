@@ -54,10 +54,8 @@ function RiderScreen(props) {
     const getAllOrders = async () => {
         try {
             setRefreshing(true);
-            // setActivityIndic(true)
             let categoryRef = await getOrderRef();
 
-            // let tempCategories = [...categories];
             const observer = categoryRef.onSnapshot(querySnapshot => {
                 querySnapshot.docChanges().forEach(async (change) => {
                     let res = await getAllNewOrders()
@@ -65,8 +63,7 @@ function RiderScreen(props) {
                 });
             });
         } catch (error) {
-            // toastify.error("Categories not found please add them");
-            console.log("Categories found: ", error)
+            console.log("Order found Error: ", error)
         }
         setRefreshing(false)
     }
