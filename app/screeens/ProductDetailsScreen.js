@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Image, StyleSheet, View, Dimensions, Text, Platform, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -14,19 +14,26 @@ import colors from '../config/colors';
 const height = Dimensions.get('window').height;
 
 function ProductDetailsScreen(props) {
-    const [product, setProduct] = useState(
-        {
-            id: 0,
-            title: "Cheese Burger Burger",
-            price: "$23",
-            description: "This is description of Burgers again this is description of Burgers again this is description of Burgers",
-            image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8YnVyZ2Vyc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
-        }
-    )
+    const [product, setProduct] = useState({})
 
     const addToCart = () => {
         props.navigation.navigate('cartScreen')
     }
+
+    const getProduct = async () => {
+        try {
+            if (props.route.params != undefined) {
+                const productResponce = props.route.params.item;
+                setProduct(productResponce)
+            }
+        } catch (error) {
+            console.log("product details: ", error)
+        }
+    }
+
+    useEffect(() => {
+        getProduct();
+    }, [props.route.params])
 
     return (
         <View style={styles.container}>

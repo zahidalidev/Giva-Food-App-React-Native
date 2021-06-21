@@ -15,17 +15,23 @@ function ProductScreen(props) {
     const [oldProducts, setOldProducts] = useState([]);
     const [activityIndic, setActivityIndic] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-
     const [products, setProducts] = useState([]);
 
     const getFilteredProducts = async () => {
         try {
             if (props.route.params.filterProducts) {
                 setProducts(props.route.params.filterProducts)
+                setOldProducts(props.route.params.filterProducts)
             }
         } catch (error) {
 
         }
+    }
+
+    const handleSearch = () => {
+        const tempProducts = [...oldProducts];
+        const searhedProducts = tempProducts.filter(item => item.title.search(searchValue) >= 0)
+        setProducts(searhedProducts)
     }
 
     const onRefresh = React.useCallback(() => {
