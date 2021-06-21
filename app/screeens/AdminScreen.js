@@ -250,12 +250,13 @@ function AdminScreen(props) {
             price,
             category,
             description,
-            image: image
         }
 
         try {
-            const res = await addProduct(body)
+            const res = await addProduct(body, image)
             if (!res) {
+                console.log("product added erro: ", res)
+
                 toastify.error("Product Not Added");
                 return;
             }
@@ -307,7 +308,7 @@ function AdminScreen(props) {
             <StatusBar style="light" backgroundColor={colors.primary} />
 
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
-                <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('profileScreen')} />
+                <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('homeScreen')} />
                 <Appbar.Content color={colors.white} title="Admin Panel" />
                 <Appbar.Action color={colors.white} icon="import" onPress={() => handleLogout()} />
             </Appbar.Header>
