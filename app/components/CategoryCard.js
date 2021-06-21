@@ -7,7 +7,6 @@ import colors from '../config/colors';
 function CategoryCard({ index, title, image }) {
     const backColors = [
         "#d50e64",
-        "#ef9fc2",
         "#85bfff",
         "#f7ca6f",
         "#65f78e"
