@@ -81,7 +81,7 @@ function LoginScreen(props) {
             const res = await loginUser(email, password, notificationToken);
             if (!res) {
                 setIndicator(false)
-                toastify.error("Login Error");
+                toastify.error("Login Error: ", res);
                 return;
             }
             await AsyncStorage.setItem('user', JSON.stringify(res));

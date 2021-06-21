@@ -127,15 +127,16 @@ function CartScreen(props) {
                     products: totalProducts,
                     contactNumber: res.contactNumber,
                     email: res.email,
-                    address: res.address,
-                    totalPrice: newTotalPrice
+                    address: res.address ? res.address : '',
+                    totalPrice: newTotalPrice,
+                    confirm: false,
+                    taken: false
                 }
-
                 await orderCart(orderObj);
                 toastify.success("Order Successfull")
 
             } catch (error) {
-                toastify.error("Order Not Completed")
+                toastify.error("Order Not Completed: ", error)
             }
         }
     }

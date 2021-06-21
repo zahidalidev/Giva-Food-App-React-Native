@@ -18,13 +18,13 @@ function RegisterScreen(props) {
     const [feilds, setFeilds] = useState([
         {
             id: 0,
-            placeHolder: "First name",
+            placeHolder: "Full Name",
             value: '',
             secure: false
         },
         {
             id: 1,
-            placeHolder: "Last name",
+            placeHolder: "Contact Number",
             value: '',
             secure: false
         },
@@ -61,7 +61,8 @@ function RegisterScreen(props) {
         }
 
         const body = {
-            name: `${feilds[0].value.trim()} ${feilds[1].value.trim()}`,
+            name: feilds[0].value.trim(),
+            contactNumber: feilds[1].value.trim(),
             email: feilds[2].value.trim().toLowerCase(),
             password: feilds[3].value.trim()
         }

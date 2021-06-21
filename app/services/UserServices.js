@@ -39,6 +39,8 @@ export const loginUser = async (email, password, notificationToken) => {
         } catch (error) {
             return false
         }
+    } else {
+        return res;
     }
 
 
