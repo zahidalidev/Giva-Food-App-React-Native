@@ -1,54 +1,55 @@
-import React, { useState } from 'react';
-import { Text, RefreshControl, ActivityIndicator, Dimensions, FlatList, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, RefreshControl, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
 
 // config
 import colors from '../config/colors';
-import AppTextInput from '../components/AppTextInput';
 import OrderCard from '../components/OrderCard';
+import { getAllNewOrders, getOrderRef } from '../services/OrderServices';
 
 // new Order = !item.taken
 // taken = taken && !confirm
 // confirm = item.confirm
 
 function RiderScreen(props) {
-    const [oldProducts, setOldProducts] = useState([]);
     const [activityIndic, setActivityIndic] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [activeComponent, setActiveComponent] = useState('newOrder');
 
-    const [products, setProducts] = useState([
-        {
-            id: 0,
-            name: "Zahid Ali",
-            address: "this is address",
-            email: "user1@gmail.com",
-            contactNumber: "+012838883839",
-            totalPrice: 127,
-            confirm: false,
-            taken: false,
-            products: [
-                {
-                    price: "$67",
-                    quantity: 1,
-                    title: "Pizza2"
-                },
-                {
-                    price: "$20",
-                    quantity: 3,
-                    title: "Burger2"
-                },
-            ]
-        }
-    ]);
+    const [products, setProducts] = useState([]);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
+        getAllOrders();
         setRefreshing(false);
-        // getIngredients();
     }, []);
+
+    useEffect(() => {
+        getAllOrders()
+    }, [])
+
+    const getAllOrders = async () => {
+        try {
+            setRefreshing(true);
+            // setActivityIndic(true)
+            let categoryRef = await getOrderRef();
+
+            // let tempCategories = [...categories];
+            const observer = categoryRef.onSnapshot(querySnapshot => {
+                querySnapshot.docChanges().forEach(async (change) => {
+                    let res = await getAllNewOrders()
+                    setProducts(res)
+                });
+            });
+        } catch (error) {
+            // toastify.error("Categories not found please add them");
+            console.log("Categories found: ", error)
+        }
+        setRefreshing(false)
+    }
+
 
     return (
         <>
