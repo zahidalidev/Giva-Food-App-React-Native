@@ -22,85 +22,26 @@ function RiderScreen(props) {
     const [products, setProducts] = useState([
         {
             id: 0,
-            title: "Cheese Burger Burger",
-            price: "$23",
-            description: "This is description of Burgers",
-            image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8YnVyZ2Vyc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
-            confirm: true,
-            taken: true
-        },
-        {
-            id: 1,
-            title: "Bbq Burger",
-            price: "$20",
-            description: "This is description of Burgers",
-            image: "https://wallpaperaccess.com/full/1312729.jpg",
+            name: "Zahid Ali",
+            address: "this is address",
+            email: "user1@gmail.com",
+            contactNumber: "+012838883839",
+            totalPrice: 127,
             confirm: false,
-            taken: true
-        },
-        {
-            id: 2,
-            title: "Smoky Burger",
-            price: "$30",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/771/93/160/food-burger-hd-wallpaper-preview.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 3,
-            title: "Grill Burger",
-            price: "$25",
-            description: "This is description of Burgers",
-            image: "https://images7.alphacoders.com/817/817988.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 4,
-            title: "Chiken Buger",
-            price: "$24",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/209/721/107/food-burger-wallpaper-preview.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 5,
-            title: "Bbq Burger",
-            price: "$20",
-            description: "This is description of Burgers",
-            image: "https://wallpaperaccess.com/full/1312729.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 6,
-            title: "Smoky Burger",
-            price: "$30",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/771/93/160/food-burger-hd-wallpaper-preview.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 7,
-            title: "Grill Burger",
-            price: "$25",
-            description: "This is description of Burgers",
-            image: "https://images7.alphacoders.com/817/817988.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 8,
-            title: "Chiken Buger",
-            price: "$24",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/209/721/107/food-burger-wallpaper-preview.jpg",
-            confirm: false,
-            taken: false
-        },
+            taken: false,
+            products: [
+                {
+                    price: "$67",
+                    quantity: 1,
+                    title: "Pizza2"
+                },
+                {
+                    price: "$20",
+                    quantity: 3,
+                    title: "Burger2"
+                },
+            ]
+        }
     ]);
 
     const onRefresh = React.useCallback(() => {
@@ -160,11 +101,11 @@ function RiderScreen(props) {
                                                     backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
                                                     // maxHeight: item.blank ? 0 : null,
                                                     width: "100%",
-                                                    height: RFPercentage(12),
+                                                    // height: RFPercentage(20),
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
-                                                        <OrderCard index={index} showConfirm={true} showTaken={true} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} price={item.price} title={item.title} description={item.description} image={item.image} />
+                                                        <OrderCard index={index} showConfirm={true} showTaken={true} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} details={item} />
                                                     }
                                                 </TouchableOpacity> : null
                                         }
@@ -192,11 +133,11 @@ function RiderScreen(props) {
                                                     backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
                                                     // maxHeight: item.blank ? 0 : null,
                                                     width: "100%",
-                                                    height: RFPercentage(12),
+                                                    height: RFPercentage(20),
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
-                                                        <OrderCard index={index} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} price={item.price} title={item.title} description={item.description} image={item.image} />
+                                                        <OrderCard index={index} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} details={item} />
                                                     }
                                                 </TouchableOpacity> : null
                                         }
@@ -225,11 +166,11 @@ function RiderScreen(props) {
                                                     backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
                                                     // maxHeight: item.blank ? 0 : null,
                                                     width: "100%",
-                                                    height: RFPercentage(12),
+                                                    height: RFPercentage(20),
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
-                                                        <OrderCard index={index} showConfirm={true} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} price={item.price} title={item.title} description={item.description} image={item.image} />
+                                                        <OrderCard index={index} showConfirm={true} showDelete={true} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} details={item} />
                                                     }
                                                 </TouchableOpacity> : null
                                         }

@@ -129,6 +129,7 @@ function CartScreen(props) {
                     email: res.email,
                     address: res.address ? res.address : '',
                     totalPrice: newTotalPrice,
+                    name: res.name,
                     confirm: false,
                     taken: false
                 }
