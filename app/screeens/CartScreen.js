@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, RefreshControl, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
 import AlertAsync from "react-native-alert-async";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Components
 import CartCard from '../components/CartCard';
@@ -18,65 +19,34 @@ function CartScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
     const [deleteAvailable, setDeleteAvailable] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const [products, setProducts] = useState([]);
 
-    const [products, setProducts] = useState([
-        {
-            id: 0,
-            title: "Cheese Burger Burger",
-            price: "$23",
-            description: "This is description of Burgers",
-            image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8YnVyZ2Vyc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
-        },
-        {
-            id: 1,
-            title: "Bbq Burger",
-            price: "$20",
-            description: "This is description of Burgers",
-            image: "https://wallpaperaccess.com/full/1312729.jpg",
-        },
-        {
-            id: 2,
-            title: "Smoky Burger",
-            price: "$30",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/771/93/160/food-burger-hd-wallpaper-preview.jpg",
-        },
-        {
-            id: 3,
-            title: "Grill Burger",
-            price: "$25",
-            description: "This is description of Burgers",
-            image: "https://images7.alphacoders.com/817/817988.jpg",
-        },
-        {
-            id: 4,
-            title: "Chiken Buger",
-            price: "$24",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/209/721/107/food-burger-wallpaper-preview.jpg",
-        },
-        {
-            id: 4,
-            title: "Chiken Buger",
-            price: "$24",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/209/721/107/food-burger-wallpaper-preview.jpg",
-        },
-        {
-            id: 4,
-            title: "Chiken Buger",
-            price: "$24",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/209/721/107/food-burger-wallpaper-preview.jpg",
-        },
 
-    ]);
+
+    const getCartProducts = async () => {
+        try {
+            let products = await AsyncStorage.getItem('product');
+            if (products) {
+                products = JSON.parse(products)
+                for (let i = 0; i < products.length; i++) {
+                    products[i].quantity = 1;
+                }
+                setProducts(products)
+            }
+        } catch (error) {
+
+        }
+    }
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
+        getCartProducts()
         setRefreshing(false);
-        // getIngredients();
     }, []);
+
+    useEffect(() => {
+        getCartProducts()
+    }, [])
 
     // check if delete button can be enable
     const checkDeleteAvailable = () => {
@@ -133,6 +103,20 @@ function CartScreen(props) {
         }
     }
 
+    const handleIncrement = (index) => {
+        let tempProducts = [...products];
+        products[index].quantity = products[index].quantity + 1
+        setProducts(tempProducts)
+    }
+
+    const handleDecrement = (index) => {
+        let tempProducts = [...products];
+        if (products[index].quantity > 1) {
+            products[index].quantity = products[index].quantity - 1
+            setProducts(tempProducts)
+        }
+    }
+
     return (
         <>
             <StatusBar style="light" backgroundColor={colors.primary} />
@@ -180,7 +164,7 @@ function CartScreen(props) {
                                         flexDirection: "column",
                                     }} >
                                         {item.blank ? null :
-                                            <CartCard index={index} price={item.price} title={item.title} description={item.description} image={item.image} />
+                                            <CartCard handleDecrement={() => handleDecrement(index)} handleIncrement={() => handleIncrement(index)} index={index} price={item.price} title={item.title} quantity={item.quantity} description={item.description} image={item.image} />
                                         }
                                     </TouchableOpacity>
 
