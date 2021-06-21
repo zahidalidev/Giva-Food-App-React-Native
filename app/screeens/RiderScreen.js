@@ -7,6 +7,8 @@ import { Appbar } from 'react-native-paper';
 // config
 import colors from '../config/colors';
 import OrderCard from '../components/OrderCard';
+
+// services
 import { deleteOrder, getAllNewOrders, getOrderRef, updateOrder } from '../services/OrderServices';
 
 // new Order = !item.taken

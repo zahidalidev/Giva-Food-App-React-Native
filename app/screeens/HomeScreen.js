@@ -113,6 +113,8 @@ function HomeScreen(props) {
                     props.navigation.navigate('adminScreen')
                 } else if (currentUser.role === 'rider') {
                     props.navigation.navigate('riderScreen')
+                } else if (currentUser.role === 'restaurant') {
+                    props.navigation.navigate('resturentScreen')
                 } else {
                     props.navigation.navigate('profileScreen')
                 }

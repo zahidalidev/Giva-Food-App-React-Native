@@ -47,7 +47,7 @@ function OrderCard({ showCompletedBtn = false, index, details, showConfirm, show
                         }
                         {
                             showCompletedBtn ?
-                                <TouchableOpacity onPress={() => onConfirm()} activeOpacity={0.7} style={{ backgroundColor: colors.secondary, borderWidth: 1, padding: RFPercentage(0.8), paddingLeft: RFPercentage(1.4), paddingRight: RFPercentage(1.4), borderColor: colors.lightGrey }} >
+                                <TouchableOpacity onPress={() => onDelete()} activeOpacity={0.7} style={{ backgroundColor: colors.secondary, borderWidth: 1, padding: RFPercentage(0.8), paddingLeft: RFPercentage(1.4), paddingRight: RFPercentage(1.4), borderColor: colors.lightGrey }} >
                                     <Text style={{ fontSize: RFPercentage(2.3), color: colors.white }} >Mark Complete</Text>
                                 </TouchableOpacity>
                                 : null

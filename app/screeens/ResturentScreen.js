@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, RefreshControl, ActivityIndicator, Dimensions, FlatList, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
@@ -6,113 +6,72 @@ import { Appbar } from 'react-native-paper';
 
 // config
 import colors from '../config/colors';
-import AppTextInput from '../components/AppTextInput';
 import OrderCard from '../components/OrderCard';
+
+// services
+import { deleteOrder, getAllNewOrders, getOrderRef } from '../services/OrderServices';
 
 // new Order = !item.taken
 // taken = taken && !confirm
 // confirm = item.confirm
 
 function ResturentScreen(props) {
-    const [oldProducts, setOldProducts] = useState([]);
     const [activityIndic, setActivityIndic] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
-    const [products, setProducts] = useState([
-        {
-            id: 0,
-            title: "Cheese Burger Burger",
-            price: "$23",
-            description: "This is description of Burgers",
-            image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8YnVyZ2Vyc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
-            confirm: true,
-            taken: true
-        },
-        {
-            id: 1,
-            title: "Bbq Burger",
-            price: "$20",
-            description: "This is description of Burgers",
-            image: "https://wallpaperaccess.com/full/1312729.jpg",
-            confirm: false,
-            taken: true
-        },
-        {
-            id: 2,
-            title: "Smoky Burger",
-            price: "$30",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/771/93/160/food-burger-hd-wallpaper-preview.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 3,
-            title: "Grill Burger",
-            price: "$25",
-            description: "This is description of Burgers",
-            image: "https://images7.alphacoders.com/817/817988.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 4,
-            title: "Chiken Buger",
-            price: "$24",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/209/721/107/food-burger-wallpaper-preview.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 5,
-            title: "Bbq Burger",
-            price: "$20",
-            description: "This is description of Burgers",
-            image: "https://wallpaperaccess.com/full/1312729.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 6,
-            title: "Smoky Burger",
-            price: "$30",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/771/93/160/food-burger-hd-wallpaper-preview.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 7,
-            title: "Grill Burger",
-            price: "$25",
-            description: "This is description of Burgers",
-            image: "https://images7.alphacoders.com/817/817988.jpg",
-            confirm: false,
-            taken: false
-        },
-        {
-            id: 8,
-            title: "Chiken Buger",
-            price: "$24",
-            description: "This is description of Burgers",
-            image: "https://c4.wallpaperflare.com/wallpaper/209/721/107/food-burger-wallpaper-preview.jpg",
-            confirm: false,
-            taken: false
-        },
-    ]);
+    const [products, setProducts] = useState([]);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
+        getAllOrders()
         setRefreshing(false);
-        // getIngredients();
     }, []);
+
+    const handleOrderDelete = async (index) => {
+        let olderTempOrders = [...products];
+        let tempOrders = [...products];
+        let docId = tempOrders[index].docId;
+        tempOrders.splice(index, 1);
+        setProducts(tempOrders);
+
+        try {
+            let res = await deleteOrder(docId)
+            if (res) {
+                await getAllOrders();
+            }
+        } catch (error) {
+            console.log("Order Deletion Error: ", error)
+            setProducts(olderTempOrders);
+        }
+    }
+
+    useEffect(() => {
+        getAllOrders()
+    }, [])
+
+    const getAllOrders = async () => {
+        try {
+            setRefreshing(true);
+            let categoryRef = await getOrderRef();
+
+            const observer = categoryRef.onSnapshot(querySnapshot => {
+                querySnapshot.docChanges().forEach(async (change) => {
+                    let res = await getAllNewOrders()
+                    setProducts(res)
+                });
+            });
+        } catch (error) {
+            console.log("Order found Error: ", error)
+        }
+        setRefreshing(false)
+    }
+
 
     return (
         <>
             <StatusBar style="light" backgroundColor={colors.primary} />
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
-                <Appbar.Action color={colors.white} icon="format-align-left" onPress={() => { }} />
+                <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('homeScreen')} />
                 <Appbar.Content color={colors.white} title="Resturent Orders" />
             </Appbar.Header>
             <View style={styles.container}>
@@ -135,18 +94,19 @@ function ResturentScreen(props) {
                                 data={products.length === 0 ? [{ blank: true }] : products}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item, index }) => {
-                                    return !item.taken ?
+                                    return item.confirm ?
                                         <TouchableOpacity onPress={() => handlePress(item)} onLongPress={() => handleLongPress(item)} activeOpacity={0.7} style={{
                                             margin: RFPercentage(1),
                                             marginLeft: "6%",
                                             backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
                                             // maxHeight: item.blank ? 0 : null,
                                             width: "100%",
-                                            height: RFPercentage(12),
+                                            // height: RFPercentage(12),
                                             flexDirection: "column",
                                         }} >
                                             {item.blank ? null :
-                                                <OrderCard showCompletedBtn={true} index={index} onConfirm={() => console.log("confirm")} onTaken={() => console.log('taken')} onDelete={() => console.log('delete')} price={item.price} title={item.title} description={item.description} image={item.image} />
+                                                <OrderCard index={index} showCompletedBtn={true} onDelete={() => handleOrderDelete(index)} details={item} />
+
                                             }
                                         </TouchableOpacity> : null
                                 }
