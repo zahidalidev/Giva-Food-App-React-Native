@@ -20,6 +20,7 @@ function CartScreen(props) {
     const [deleteAvailable, setDeleteAvailable] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [products, setProducts] = useState([]);
+    const [newTotalPrice, setNewTotalPrice] = useState([]);
 
 
 
@@ -28,13 +29,18 @@ function CartScreen(props) {
             let products = await AsyncStorage.getItem('product');
             if (products) {
                 products = JSON.parse(products)
+                let totalPrice = 0;
                 for (let i = 0; i < products.length; i++) {
                     products[i].quantity = 1;
+                    let price = products[i].price.match(/(\d+)/);
+                    price = parseFloat(price)
+                    totalPrice += price;
                 }
                 setProducts(products)
+                setNewTotalPrice(totalPrice)
             }
         } catch (error) {
-
+            console.log("products cart error: ", error)
         }
     }
 
@@ -103,10 +109,21 @@ function CartScreen(props) {
         }
     }
 
+    const calculateTotalPrice = (tempProducts) => {
+        let totalPrice = 0;
+        for (let i = 0; i < tempProducts.length; i++) {
+            let price = tempProducts[i].price.match(/(\d+)/);
+            price = parseFloat(price) * tempProducts[i].quantity
+            totalPrice += price;
+        }
+        setNewTotalPrice(totalPrice)
+    }
+
     const handleIncrement = (index) => {
         let tempProducts = [...products];
         products[index].quantity = products[index].quantity + 1
         setProducts(tempProducts)
+        calculateTotalPrice(tempProducts)
     }
 
     const handleDecrement = (index) => {
@@ -114,6 +131,7 @@ function CartScreen(props) {
         if (products[index].quantity > 1) {
             products[index].quantity = products[index].quantity - 1
             setProducts(tempProducts)
+            calculateTotalPrice(tempProducts)
         }
     }
 
@@ -174,7 +192,7 @@ function CartScreen(props) {
                             <View style={{ backgroundColor: colors.white, alignItems: "center", width: "100%", position: "absolute", bottom: 0, paddingBottom: RFPercentage(4) }} >
                                 <View style={{ padding: RFPercentage(2), width: "50%", justifyContent: "space-evenly", flexDirection: "row" }} >
                                     <Text style={{ fontSize: RFPercentage(2.8) }} >Total</Text>
-                                    <Text style={{ fontSize: RFPercentage(2.8), fontWeight: "bold" }}>$130</Text>
+                                    <Text style={{ fontSize: RFPercentage(2.8), fontWeight: "bold" }}>{newTotalPrice}</Text>
                                 </View>
                                 <AppTextButton
                                     name="Order"
