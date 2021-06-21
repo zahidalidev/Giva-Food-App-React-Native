@@ -60,8 +60,7 @@ function CartScreen(props) {
         setDeleteAvailable(available)
     }
 
-    const handleLongPress = (item) => {
-        const index = products.indexOf(item);
+    const handleLongPress = (index) => {
         let tempProducts = [...products];
         tempProducts[index].toDelete = !tempProducts[index].toDelete;
         setProducts(tempProducts)
@@ -70,8 +69,7 @@ function CartScreen(props) {
         checkDeleteAvailable()
     }
 
-    const handlePress = (item) => {
-        const index = products.indexOf(item);
+    const handlePress = (index) => {
         let tempProducts = [...products];
         tempProducts[index].toDelete = !tempProducts[index].toDelete;
         setProducts(tempProducts)
@@ -80,10 +78,17 @@ function CartScreen(props) {
         checkDeleteAvailable()
     }
 
-    const handleDelete = () => {
-        const tempProducts = products.filter(item => !item.toDelete);
+    const handleDelete = async () => {
+        let tempProducts = [...products];
+        tempProducts = tempProducts.filter(item => !item.toDelete);
         setProducts(tempProducts);
+        try {
+            await AsyncStorage.removeItem('product');
+            await AsyncStorage.setItem('product', JSON.stringify(tempProducts));
+            calculateTotalPrice(tempProducts)
+        } catch (error) {
 
+        }
         // disable delte button
         setDeleteAvailable(false)
     }
@@ -172,7 +177,7 @@ function CartScreen(props) {
                                 data={products.length === 0 ? [{ blank: true }] : products}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item, index }) =>
-                                    <TouchableOpacity onPress={() => handlePress(item)} onLongPress={() => handleLongPress(item)} activeOpacity={0.7} style={{
+                                    <TouchableOpacity onPress={() => handlePress(index)} onLongPress={() => handleLongPress(index)} activeOpacity={0.7} style={{
                                         margin: RFPercentage(1),
                                         marginLeft: "6%",
                                         backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
