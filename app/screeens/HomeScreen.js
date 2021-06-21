@@ -12,7 +12,7 @@ import CategoryCard from "../components/CategoryCard";
 
 // config
 import colors from '../config/colors';
-import { getCategories } from '../services/CategoryServices';
+import { getAllNewCategories, getCategories } from '../services/CategoryServices';
 import { getProducts } from "../services/ProductServices";
 // import GetSqlDate from '../components/commmon/GetSqlDate';
 
@@ -58,30 +58,34 @@ function HomeScreen(props) {
             setActivityIndic(true)
             let categoryRef = await getCategories();
 
-            let tempCategories = [...categories];
+            // let tempCategories = [...categories];
             const observer = categoryRef.onSnapshot(querySnapshot => {
-                querySnapshot.docChanges().forEach(change => {
-                    if (change.type === 'added') {
-                        let newData = change.doc.data()
+                querySnapshot.docChanges().forEach(async (change) => {
+                    let res = await getAllNewCategories()
+                    setCategories(res)
+                    // if (change.type === 'added') {
+                    //     let newData = change.doc.data()
 
-                        let hasObject = []
-                        tempCategories.filter(item => {
-                            if (item.label === newData.label) {
-                                hasObject.push(true)
-                            }
-                        });
+                    //     let hasObject = []
+                    //     tempCategories.filter(item => {
+                    //         if (item.label === newData.label) {
+                    //             hasObject.push(true)
+                    //         }
+                    //     });
 
-                        if (!(hasObject.includes(true))) {
-                            tempCategories.push(change.doc.data())
-                            setCategories(tempCategories)
-                        }
-                    }
-                    if (change.type === 'modified') {
-                        console.log('Modified Category: ', change.doc.data());
-                    }
-                    if (change.type === 'removed') {
-                        console.log('Removed Category: ', change.doc.data());
-                    }
+                    //     if (!(hasObject.includes(true))) {
+                    //         tempCategories.push(change.doc.data())
+                    //         setCategories(tempCategories)
+                    //     }
+
+                    // }
+                    // if (change.type === 'modified') {
+                    //     console.log('Modified Category: ', change.doc.data());
+
+                    // }
+                    // if (change.type === 'removed') {
+                    //     console.log('Removed Category: ', change.doc.data());
+                    // }
                 });
             });
         } catch (error) {
@@ -128,7 +132,6 @@ function HomeScreen(props) {
     const handleProductCategory = (label) => {
         let tempProducts = [...allProducts];
         const filterProducts = tempProducts.filter(item => item.category == label);
-        console.log("filterProducts: ", label, allProducts)
         try {
             props.navigation.navigate('productScreen', { filterProducts: filterProducts })
         } catch (error) {

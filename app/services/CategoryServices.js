@@ -53,25 +53,19 @@ export const getCategories = async () => {
     return categoryRef;
 }
 
+export const getAllNewCategories = async () => {
+    const snapshot = await categoryRef.get();
+    if (snapshot.empty) {
+        return false;
+    }
 
-const uriToBlob = (uri) => {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            // return the blob
-            resolve(xhr.response);
-        };
-
-        xhr.onerror = function () {
-            // something went wrong
-            reject(new Error('uriToBlob failed'));
-        };
-        // this helps us get a blob
-        xhr.responseType = 'blob';
-        xhr.open('GET', uri, true);
-
-        xhr.send(null);
+    let res = []
+    snapshot.forEach(doc => {
+        let tempRes = doc.data()
+        tempRes.docId = doc.id
+        res.push(tempRes)
     });
-}
 
+    return res;
+}
 
