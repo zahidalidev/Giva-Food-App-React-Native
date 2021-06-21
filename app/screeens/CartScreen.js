@@ -5,6 +5,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
 import AlertAsync from "react-native-alert-async";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from "toastify-react-native";
 
 // Components
 import CartCard from '../components/CartCard';
@@ -13,12 +14,17 @@ import CartCard from '../components/CartCard';
 import colors from '../config/colors';
 import AppTextButton from '../components/AppTextButton';
 
+// services
+import { orderCart } from "../services/OrderServices";
+
 function CartScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
     const [deleteAvailable, setDeleteAvailable] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [products, setProducts] = useState([]);
     const [newTotalPrice, setNewTotalPrice] = useState([]);
+    const [toastify, setToastify] = useState();
+
 
     const getCartProducts = async () => {
         try {
@@ -92,9 +98,9 @@ function CartScreen(props) {
     const orderNow = async () => {
         const res = await AlertAsync(
             'Order Confirmation',
-            'Press Confirm the Order',
+            'Please Confirm the Order or Cancel',
             [
-                { text: 'Confirm', onPress: () => true },
+                { text: 'Confirm', onPress: () => 'yes' },
                 { text: 'Cancel', onPress: () => Promise.resolve('no') },
             ],
             {
@@ -103,10 +109,34 @@ function CartScreen(props) {
             },
         );
 
-        if (res) {
-            console.log(res)
-        }
-        else {
+        if (res == 'yes') {
+            try {
+                let tempProducts = [...products];
+                let totalProducts = [];
+                for (let i = 0; i < tempProducts.length; i++) {
+                    let obj = {};
+                    obj.title = tempProducts[i].title;
+                    obj.price = tempProducts[i].price;
+                    obj.quantity = tempProducts[i].quantity;
+                    totalProducts.push(obj);
+                }
+                let res = await AsyncStorage.getItem('user');
+                res = JSON.parse(res);
+
+                let orderObj = {
+                    products: totalProducts,
+                    contactNumber: res.contactNumber,
+                    email: res.email,
+                    address: res.address,
+                    totalPrice: newTotalPrice
+                }
+
+                await orderCart(orderObj);
+                toastify.success("Order Successfull")
+
+            } catch (error) {
+                toastify.error("Order Not Completed")
+            }
         }
     }
 
@@ -144,6 +174,10 @@ function CartScreen(props) {
                 <Appbar.Content color={colors.white} title={`Cart (${products.length})`} />
                 {/* <Appbar.Action color={colors.white} icon="account-circle" onPress={() => { }} /> */}
             </Appbar.Header>
+
+            {/* toast component */}
+            <Toast ref={(c) => setToastify(c)} />
+
             <View style={styles.container}>
                 {activityIndic
                     ? <View style={{ flexDirection: 'column', marginTop: -RFPercentage(7), borderTopLeftRadius: RFPercentage(8), backgroundColor: colors.lightGrey, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
