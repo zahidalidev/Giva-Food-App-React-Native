@@ -14,15 +14,11 @@ import colors from '../config/colors';
 import AppTextButton from '../components/AppTextButton';
 
 function CartScreen(props) {
-    const [searchValue, setSearchValue] = useState('');
-    const [oldProducts, setOldProducts] = useState([]);
     const [activityIndic, setActivityIndic] = useState(false);
     const [deleteAvailable, setDeleteAvailable] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [products, setProducts] = useState([]);
     const [newTotalPrice, setNewTotalPrice] = useState([]);
-
-
 
     const getCartProducts = async () => {
         try {
