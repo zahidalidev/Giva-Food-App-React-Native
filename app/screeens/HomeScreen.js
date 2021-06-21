@@ -13,14 +13,14 @@ import CategoryCard from "../components/CategoryCard";
 // config
 import colors from '../config/colors';
 import { getCategories } from '../services/CategoryServices';
-// import { getAllCategories } from "../services/CategoriesService";
+import { getProducts } from "../services/ProductServices";
 // import GetSqlDate from '../components/commmon/GetSqlDate';
 
 const windowWidth = Dimensions.get('window').width;
 
 function HomeScreen(props) {
+    const [allProducts, setAllProducts] = useState([]);
     const [searchValue, setSearchValue] = useState('');
-    const [oldCategories, setOldCategories] = useState([]);
     const [activityIndic, setActivityIndic] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -29,16 +29,31 @@ function HomeScreen(props) {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        setRefreshing(false);
         getAllCategories();
+        getAllProducts()
+        setRefreshing(false);
     }, []);
 
     const handleSearch = () => {
-
+        props.navigation.navigate('productScreen', { filterProducts: allProducts })
     }
 
-    const getAllCategories = async () => {
+    const getAllProducts = async () => {
+        try {
+            setActivityIndic(true)
+            let res = await getProducts();
+            setAllProducts(res)
 
+        } catch (error) {
+            // toastify.error("Categories not found please add them");
+            console.log("Categories found: ", error)
+        }
+        setRefreshing(false)
+        setActivityIndic(false);
+    }
+
+
+    const getAllCategories = async () => {
         try {
             setActivityIndic(true)
             let categoryRef = await getCategories();
@@ -62,10 +77,10 @@ function HomeScreen(props) {
                         }
                     }
                     if (change.type === 'modified') {
-                        console.log('Modified city: ', change.doc.data());
+                        console.log('Modified Category: ', change.doc.data());
                     }
                     if (change.type === 'removed') {
-                        console.log('Removed city: ', change.doc.data());
+                        console.log('Removed Category: ', change.doc.data());
                     }
                 });
             });
@@ -79,6 +94,7 @@ function HomeScreen(props) {
 
     useEffect(() => {
         getAllCategories();
+        getAllProducts();
     }, []);
 
     const handleLogout = async () => {
@@ -105,7 +121,18 @@ function HomeScreen(props) {
             }
 
         } catch (error) {
-            console.log("roles: ", error)
+
+        }
+    }
+
+    const handleProductCategory = (label) => {
+        let tempProducts = [...allProducts];
+        const filterProducts = tempProducts.filter(item => item.category == label);
+        console.log("filterProducts: ", label, allProducts)
+        try {
+            props.navigation.navigate('productScreen', { filterProducts: filterProducts })
+        } catch (error) {
+            console.log("Handle Product Category Error: ", error)
         }
     }
 
@@ -149,11 +176,12 @@ function HomeScreen(props) {
                                         placeHolder="Search for food"
                                         width="100%"
                                         value={searchValue}
-                                        onChange={(text) => setSearchValue(text)}
+                                        onChange={(text) => handleSearch()}
                                         rightIcon="magnify"
                                         rightFunction={() => handleSearch()}
                                         elevation={1}
                                         height={RFPercentage(6.51)}
+                                        startEdit={() => handleSearch()}
                                     />
                                 </View>
                             </View>
@@ -171,7 +199,7 @@ function HomeScreen(props) {
                                 data={categories.length === 0 ? [{ blank: true }] : categories}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item, index }) =>
-                                    <TouchableOpacity onPress={() => props.navigation.navigate('productScreen', { item: item })} activeOpacity={0.9} style={{
+                                    <TouchableOpacity onPress={() => handleProductCategory(item.label)} activeOpacity={0.9} style={{
                                         margin: RFPercentage(1),
                                         marginBottom: RFPercentage(1.5),
                                         marginRight: RFPercentage(2),

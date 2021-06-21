@@ -46,5 +46,17 @@ export const addProduct = async (body, uri) => {
 }
 
 export const getProducts = async () => {
-    return productRef;
+    const snapshot = await productRef.get();
+    if (snapshot.empty) {
+        return false;
+    }
+
+    let res = []
+    snapshot.forEach(doc => {
+        let tempRes = doc.data()
+        tempRes.docId = doc.id
+        res.push(tempRes)
+    });
+
+    return res;
 }
