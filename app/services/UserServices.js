@@ -42,6 +42,4 @@ export const loginUser = async (email, password, notificationToken) => {
     } else {
         return res;
     }
-
-
 }

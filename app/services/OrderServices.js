@@ -35,3 +35,21 @@ export const getAllNewOrders = async () => {
 
     return res;
 }
+
+export const updateOrder = async (id, body) => {
+    try {
+        await orderRef.doc(id).update(body)
+        return true;
+    } catch (error) {
+        return false
+    }
+}
+
+export const deleteOrder = async (id) => {
+    try {
+        await orderRef.doc(id).delete()
+        return true;
+    } catch (error) {
+        return false
+    }
+}

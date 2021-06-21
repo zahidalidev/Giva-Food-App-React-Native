@@ -7,7 +7,7 @@ import { Appbar } from 'react-native-paper';
 // config
 import colors from '../config/colors';
 import OrderCard from '../components/OrderCard';
-import { getAllNewOrders, getOrderRef } from '../services/OrderServices';
+import { deleteOrder, getAllNewOrders, getOrderRef, updateOrder } from '../services/OrderServices';
 
 // new Order = !item.taken
 // taken = taken && !confirm
@@ -26,10 +26,24 @@ function RiderScreen(props) {
         setRefreshing(false);
     }, []);
 
+    const updateExistingOrder = async (id, body) => {
+        try {
+            let res = await updateOrder(id, body)
+            if (res) {
+                await getAllOrders();
+            }
+        } catch (error) {
+            console.log("Update Order Error: ", error)
+        }
+    }
+
     const handleOrderTaken = async (index) => {
         let tempOrders = [...products];
         tempOrders[index].taken = true;
         tempOrders[index].confirm = false;
+
+        let docId = tempOrders[index].docId;
+        await updateExistingOrder(docId, tempOrders[index])
         setProducts(tempOrders)
     }
 
@@ -37,14 +51,29 @@ function RiderScreen(props) {
         let tempOrders = [...products];
         tempOrders[index].taken = true;
         tempOrders[index].confirm = true;
+
+        let docId = tempOrders[index].docId;
+        await updateExistingOrder(docId, tempOrders[index])
+
         setProducts(tempOrders)
     }
 
     const handleOrderDelete = async (index) => {
+        let olderTempOrders = [...products];
         let tempOrders = [...products];
         let docId = tempOrders[index].docId;
         tempOrders.splice(index, 1);
-        setProducts(tempOrders)
+        setProducts(tempOrders);
+
+        try {
+            let res = await deleteOrder(docId)
+            if (res) {
+                await getAllOrders();
+            }
+        } catch (error) {
+            console.log("Order Deletion Error: ", error)
+            setProducts(olderTempOrders);
+        }
     }
 
     useEffect(() => {
