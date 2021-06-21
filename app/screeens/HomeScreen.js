@@ -23,7 +23,7 @@ function HomeScreen(props) {
     const [searchValue, setSearchValue] = useState('');
     const [activityIndic, setActivityIndic] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-
+    const [currentUser, setCurrentUser] = useState({})
     const [categories, setCategories] = useState([]);
 
 
@@ -63,29 +63,6 @@ function HomeScreen(props) {
                 querySnapshot.docChanges().forEach(async (change) => {
                     let res = await getAllNewCategories()
                     setCategories(res)
-                    // if (change.type === 'added') {
-                    //     let newData = change.doc.data()
-
-                    //     let hasObject = []
-                    //     tempCategories.filter(item => {
-                    //         if (item.label === newData.label) {
-                    //             hasObject.push(true)
-                    //         }
-                    //     });
-
-                    //     if (!(hasObject.includes(true))) {
-                    //         tempCategories.push(change.doc.data())
-                    //         setCategories(tempCategories)
-                    //     }
-
-                    // }
-                    // if (change.type === 'modified') {
-                    //     console.log('Modified Category: ', change.doc.data());
-
-                    // }
-                    // if (change.type === 'removed') {
-                    //     console.log('Removed Category: ', change.doc.data());
-                    // }
                 });
             });
         } catch (error) {
@@ -96,9 +73,25 @@ function HomeScreen(props) {
         setActivityIndic(false);
     }
 
+    const getUser = async () => {
+        try {
+            let user = await AsyncStorage.getItem('user');
+            if (user) {
+                user = JSON.parse(user);
+                setCurrentUser(user)
+            } else {
+                setCurrentUser({})
+            }
+        } catch (error) {
+            console.log("Home user name error: ", error)
+            setCurrentUser({})
+        }
+    }
+
     useEffect(() => {
         getAllCategories();
         getAllProducts();
+        getUser()
     }, []);
 
     const handleLogout = async () => {
@@ -156,7 +149,7 @@ function HomeScreen(props) {
                     <View style={{ marginTop: RFPercentage(2), flexDirection: 'row', width: "90%", justifyContent: "space-between" }} >
                         <View style={{ flexDirection: "column", width: "60%", marginTop: RFPercentage(3.5) }} >
                             <Text style={{ fontWeight: "bold", fontSize: RFPercentage(4), color: colors.white }} >
-                                Hi, Zahid
+                                Hi, {currentUser.name}
                             </Text>
                             <Text style={{ fontSize: RFPercentage(2.2), color: colors.white }}>
                                 Choose the food you love and order !
