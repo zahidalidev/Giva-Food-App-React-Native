@@ -137,9 +137,9 @@ function CartScreen(props) {
         <>
             <StatusBar style="light" backgroundColor={colors.primary} />
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
-                <Appbar.Action color={colors.white} icon="format-align-left" onPress={() => { }} />
+                <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('homeScreen')} />
                 <Appbar.Content color={colors.white} title={`Cart (${products.length})`} />
-                <Appbar.Action color={colors.white} icon="account-circle" onPress={() => { }} />
+                {/* <Appbar.Action color={colors.white} icon="account-circle" onPress={() => { }} /> */}
             </Appbar.Header>
             <View style={styles.container}>
                 {activityIndic

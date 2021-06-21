@@ -142,6 +142,7 @@ function HomeScreen(props) {
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
                 <Appbar.Action onPress={() => handleProfiles()} color={colors.white} icon="account-circle" />
                 <Appbar.Content color={colors.white} title="Home" />
+                <Appbar.Action onPress={() => props.navigation.navigate('cartScreen')} color={colors.white} icon="cart" />
                 <Appbar.Action onPress={() => handleLogout()} color={colors.white} icon="import" />
             </Appbar.Header>
             <View style={styles.container}>

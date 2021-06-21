@@ -4,6 +4,8 @@ import { Image, StyleSheet, View, Dimensions, Text, Platform, TouchableOpacity }
 import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { AntDesign } from "@expo/vector-icons"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from "toastify-react-native";
 
 // components
 import AppTextButton from '../components/AppTextButton';
@@ -14,10 +16,24 @@ import colors from '../config/colors';
 const height = Dimensions.get('window').height;
 
 function ProductDetailsScreen(props) {
+    const [toastify, setToastify] = useState();
     const [product, setProduct] = useState({})
 
-    const addToCart = () => {
-        props.navigation.navigate('cartScreen')
+    const addToCart = async () => {
+        try {
+            let products = await AsyncStorage.getItem('product');
+            await AsyncStorage.removeItem('product');
+            if (products) {
+                products = JSON.parse(products)
+                await AsyncStorage.setItem('product', JSON.stringify([...products, product]))
+            } else {
+                await AsyncStorage.setItem('product', JSON.stringify([product]))
+            }
+
+            toastify.success(`${product.title} is added to Cart`)
+        } catch (error) {
+            toastify.error(`Something went wrong`)
+        }
     }
 
     const getProduct = async () => {
@@ -38,6 +54,8 @@ function ProductDetailsScreen(props) {
     return (
         <View style={styles.container}>
             <StatusBar style="light" />
+            <Toast ref={(c) => setToastify(c)} />
+
             <Image resizeMode="cover" style={{ width: "100%", height: (height / 2) - RFPercentage(5) }} source={{ uri: product.image }} />
 
             <TouchableOpacity onPress={() => props.navigation.navigate('productScreen')} style={{ position: "absolute", top: RFPercentage(5), right: RFPercentage(3) }} >
