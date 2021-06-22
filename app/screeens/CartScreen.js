@@ -135,9 +135,8 @@ function CartScreen(props) {
                     taken: false
                 }
 
-                // await orderCart(orderObj);
-                // toastify.success("Order Successfull")
-                console.log("here ")
+                await orderCart(orderObj);
+                toastify.success("Order Successfull")
                 await getRiderPushTokens('rider')
 
             } catch (error) {
