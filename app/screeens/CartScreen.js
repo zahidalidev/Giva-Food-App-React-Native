@@ -125,12 +125,12 @@ function CartScreen(props) {
                 res = JSON.parse(res);
 
                 let orderObj = {
-                    products: totalProducts,
-                    contactNumber: res.contactNumber,
-                    email: res.email,
+                    products: totalProducts ? totalProducts : '',
+                    contactNumber: res.contactNumber ? res.contactNumber : '',
+                    email: res.email ? res.email : '',
                     address: res.address ? res.address : '',
                     totalPrice: newTotalPrice,
-                    name: res.name,
+                    name: res.name ? res.name : '',
                     confirm: false,
                     taken: false
                 }
@@ -140,6 +140,7 @@ function CartScreen(props) {
                 await getRiderPushTokens('rider')
 
             } catch (error) {
+                console.log("Order Not Completed: ", error)
                 toastify.error("Order Not Completed: ", error)
             }
         }

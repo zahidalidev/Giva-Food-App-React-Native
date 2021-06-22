@@ -1,3 +1,5 @@
+import * as Notifications from 'expo-notifications';
+
 export const SentNotification = async (arr) => {
 
     // const arr = [{
@@ -9,6 +11,16 @@ export const SentNotification = async (arr) => {
     //     "badge": 1,
     //     "body": "You've got mail"
     // }]
+
+    // await Notifications.scheduleNotificationAsync({
+    //     content: {
+    //         title: "title",
+    //         body: "title body",
+    //         // data: { data: 'goes here' },
+    //     },
+    //     trigger: { seconds: 1 },
+    // });
+
 
     fetch('https://exp.host/--/api/v2/push/send', {
         method: 'POST',
@@ -23,4 +35,6 @@ export const SentNotification = async (arr) => {
         .then((response) => response.json())
         .then((responseJson) => { console.log("responseJson new: ", responseJson) })
         .catch((error) => { console.log("notify error: ", error) });
+
+
 }
