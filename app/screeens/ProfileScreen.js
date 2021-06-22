@@ -12,13 +12,14 @@ import colors from '../config/colors';
 import AppTextButton from '../components/AppTextButton';
 
 // import logo from "../../assets/images/kitchenLogo.gif"
-// import { loginUser } from '../services/userService';
+import { updateUser } from '../services/UserServices';
+
 import { useEffect } from 'react';
-import AccountText from '../components/common/AccountText';
 
 function ProfileScreen(props) {
     const [indicator, setIndicator] = useState(false);
     const [toastify, setToastify] = useState();
+    const [currentUser, setCurrentUser] = useState({});
     const [feilds, setFeilds] = useState([
         {
             id: 0,
@@ -54,24 +55,55 @@ function ProfileScreen(props) {
     }
 
     const handleSubmit = async () => {
-        // const email = feilds[0].value;
-        // const password = feilds[1].value;
-        // try {
-        //     setIndicator(true)
-        //     const { data } = await loginUser(email, password);
-        //     await AsyncStorage.setItem('token', data.id.toString());
-        //     setIndicator(false)
-        props.navigation.navigate('homeScreen')
-        // } catch (error) {
-        //     console.log("login error: ", error);
-        //     setIndicator(false)
-        //     toastify.error("Login Error");
-        // }
+        const body = {
+            name: feilds[0].value,
+            email: feilds[1].value,
+            contactNumber: feilds[2].value,
+            address: feilds[3].value,
+            password: feilds[4].value,
+        }
+
+        try {
+            setIndicator(true)
+            let currentUser = await await AsyncStorage.getItem('user');
+            currentUser = JSON.parse(currentUser);
+
+            const res = await updateUser(currentUser.docId, body);
+            console.log(res)
+            await AsyncStorage.removeItem('user');
+            await AsyncStorage.setItem('user', JSON.stringify(res));
+
+            setIndicator(false)
+            toastify.success("User Updated");
+            getCurrentUser()
+        } catch (error) {
+            console.log("Updation error: ", error);
+            setIndicator(false)
+            toastify.error("Updation Error");
+        }
     }
 
+    const getCurrentUser = async () => {
+        try {
+            let currentUser = await await AsyncStorage.getItem('user');
+            currentUser = JSON.parse(currentUser);
+            setCurrentUser(currentUser)
+            let tempFields = [...feilds];
+            tempFields[0].value = currentUser.name;
+            tempFields[1].value = currentUser.email;
+            tempFields[2].value = currentUser.contactNumber;
+            tempFields[3].value = currentUser.address ? currentUser.address : '';
+            tempFields[4].value = currentUser.password;
+
+            setFeilds(tempFields)
+
+        } catch (error) {
+
+        }
+    }
 
     useEffect(() => {
-        // validateWithToken();
+        getCurrentUser();
     }, [props.route.params]);
 
     return (
@@ -92,7 +124,7 @@ function ProfileScreen(props) {
                 </View>
                 <View style={{ marginTop: RFPercentage(2.8), width: RFPercentage(12), height: RFPercentage(12), borderRadius: RFPercentage(20), backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center' }} >
                     <Text style={{ fontSize: RFPercentage(6), color: colors.primary }} >
-                        Z
+                        {currentUser.name[0]}
                     </Text>
                 </View>
             </View>
@@ -130,9 +162,6 @@ function ProfileScreen(props) {
                             />
                         </View>
                     </View>
-
-
-
                 </>
             }
         </View>

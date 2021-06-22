@@ -78,6 +78,7 @@ function HomeScreen(props) {
             let user = await AsyncStorage.getItem('user');
             if (user) {
                 user = JSON.parse(user);
+                console.log("user: ", user)
                 setCurrentUser(user)
             } else {
                 setCurrentUser({})

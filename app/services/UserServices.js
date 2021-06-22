@@ -25,21 +25,54 @@ export const loginUser = async (email, password, notificationToken) => {
         return false;
     }
 
-    let res = ''
-    let id = '';
+    let res = {}
     snapshot.forEach(doc => {
         res = doc.data()
-        id = doc.id
+        res.docId = doc.id
     });
 
     if (res.role === 'admin' || res.role === 'rider' || res.role === 'restaurant') {
         try {
-            await userRef.doc(id).update({ notificationToken: notificationToken })
-            return res
+            await userRef.doc(res.docId).update({ notificationToken: notificationToken })
+
+            const snapshot2 = await userRef.where('email', '==', email).where('password', '==', password).get();
+            if (snapshot2.empty) {
+                return false;
+            }
+
+            let res2 = {}
+            snapshot2.forEach(doc => {
+                res2 = doc.data()
+                res2.docId = doc.id
+            });
+
+            return res2;
+
         } catch (error) {
             return false
         }
     } else {
         return res;
+    }
+}
+
+export const updateUser = async (id, body) => {
+    try {
+        await userRef.doc(id).update(body)
+
+        const snapshot2 = await userRef.where('email', '==', body.email).where('password', '==', body.password).get();
+        if (snapshot2.empty) {
+            return false;
+        }
+
+        let res2 = {}
+        snapshot2.forEach(doc => {
+            res2 = doc.data()
+            res2.docId = doc.id
+        });
+
+        return res2;
+    } catch (error) {
+        return false
     }
 }
