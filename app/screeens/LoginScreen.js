@@ -17,7 +17,6 @@ import { useEffect } from 'react';
 import AccountText from '../components/common/AccountText';
 
 function LoginScreen(props) {
-    const [notificationToken, setNotificationToken] = useState(false);
     const [indicator, setIndicator] = useState(false);
     const [toastify, setToastify] = useState();
     const [feilds, setFeilds] = useState([
@@ -46,6 +45,8 @@ function LoginScreen(props) {
         let token;
         if (Constants.isDevice) {
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            console.log("notification status: ", existingStatus)
+            await Notifications.requestPermissionsAsync();
             let finalStatus = existingStatus;
             if (existingStatus !== 'granted') {
                 const { status } = await Notifications.requestPermissionsAsync();
@@ -70,7 +71,7 @@ function LoginScreen(props) {
             });
         }
 
-        setNotificationToken(token)
+        return token
     }
 
     const handleSubmit = async () => {
@@ -78,6 +79,7 @@ function LoginScreen(props) {
         const password = feilds[1].value;
         try {
             setIndicator(true)
+            let notificationToken = await registerForPushNotificationsAsync()
             const res = await loginUser(email, password, notificationToken);
             if (!res) {
                 setIndicator(false)
@@ -110,7 +112,6 @@ function LoginScreen(props) {
     }
 
     useEffect(() => {
-        registerForPushNotificationsAsync()
         validateCurrentUser();
     }, [props.route.params]);
 
