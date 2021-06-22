@@ -27,7 +27,7 @@ function Notification(props) {
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-            // console.log(response);
+            console.log("response zahid: ", response);
         });
 
         return () => {
@@ -36,63 +36,63 @@ function Notification(props) {
         };
     }, []);
 
-    async function registerForPushNotificationsAsync() {
-        let token;
-        if (Constants.isDevice) {
-            const { status: existingStatus } = await Notifications.getPermissionsAsync();
-            let finalStatus = existingStatus;
-            if (existingStatus !== 'granted') {
-                const { status } = await Notifications.requestPermissionsAsync();
-                finalStatus = status;
-            }
-            if (finalStatus !== 'granted') {
-                alert('Failed to get push token for push notification!');
-                return;
-            }
-            token = (await Notifications.getExpoPushTokenAsync()).data;
-            console.log(Platform.OS, "  ", token);
-        } else {
-            alert('Must use physical device for Push Notifications');
-        }
+    // async function registerForPushNotificationsAsync() {
+    //     let token;
+    //     if (Constants.isDevice) {
+    //         const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    //         let finalStatus = existingStatus;
+    //         if (existingStatus !== 'granted') {
+    //             const { status } = await Notifications.requestPermissionsAsync();
+    //             finalStatus = status;
+    //         }
+    //         if (finalStatus !== 'granted') {
+    //             alert('Failed to get push token for push notification!');
+    //             return;
+    //         }
+    //         token = (await Notifications.getExpoPushTokenAsync()).data;
+    //         console.log(Platform.OS, "  ", token);
+    //     } else {
+    //         alert('Must use physical device for Push Notifications');
+    //     }
 
-        if (Platform.OS === 'android') {
-            Notifications.setNotificationChannelAsync('default', {
-                name: 'default',
-                importance: Notifications.AndroidImportance.MAX,
-                vibrationPattern: [0, 250, 250, 250],
-                lightColor: '#FF231F7C',
-            });
-        }
+    //     if (Platform.OS === 'android') {
+    //         Notifications.setNotificationChannelAsync('default', {
+    //             name: 'default',
+    //             importance: Notifications.AndroidImportance.MAX,
+    //             vibrationPattern: [0, 250, 250, 250],
+    //             lightColor: '#FF231F7C',
+    //         });
+    //     }
 
-        return token;
-    }
+    //     return token;
+    // }
 
 
-    const sendTo = async () => {
-        console.log("ios", expoPushToken)
+    // const sendTo = async () => {
+    //     console.log("ios", expoPushToken)
 
-        const arr = [{
-            "to": "ExponentPushToken[-pIuasJ4dIFEaaA4Jn1xBV]",
-            "sound": "default",
-            "body": "Hello world!"
-        }, {
-            "to": "ExponentPushToken[-pIuasJ4dIFEaaA4Jn1xBV]",
-            "badge": 1,
-            "body": "You've got mail"
-        }]
+    //     const arr = [{
+    //         "to": "ExponentPushToken[-pIuasJ4dIFEaaA4Jn1xBV]",
+    //         "sound": "default",
+    //         "body": "Hello world!"
+    //     }, {
+    //         "to": "ExponentPushToken[-pIuasJ4dIFEaaA4Jn1xBV]",
+    //         "badge": 1,
+    //         "body": "You've got mail"
+    //     }]
 
-        fetch('https://exp.host/--/api/v2/push/send', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Accept-encoding': 'gzip, deflate',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(arr)
-        }).then((response) => response.json())
-            .then((responseJson) => { console.log(responseJson) })
-            .catch((error) => { console.log(error) });
-    }
+    //     fetch('https://exp.host/--/api/v2/push/send', {
+    //         method: 'POST',
+    //         headers: {
+    //             Accept: 'application/json',
+    //             'Accept-encoding': 'gzip, deflate',
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(arr)
+    //     }).then((response) => response.json())
+    //         .then((responseJson) => { console.log(responseJson) })
+    //         .catch((error) => { console.log(error) });
+    // }
 
     return (
         <View style={styles.container}>

@@ -20,6 +20,6 @@ export const SentNotification = async (arr) => {
         body: JSON.stringify(arr)
     })
         .then((response) => response.json())
-        .then((responseJson) => { console.log("responseJson: ", responseJson) })
+        .then((responseJson) => { console.log("responseJson new: ", responseJson) })
         .catch((error) => { console.log("notify error: ", error) });
 }

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Text, RefreshControl, ActivityIndicator, Dimensions, FlatList, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
 
 // Components
 import AppTextInput from '../components/AppTextInput';
@@ -25,6 +26,11 @@ function HomeScreen(props) {
     const [refreshing, setRefreshing] = useState(false);
     const [currentUser, setCurrentUser] = useState({})
     const [categories, setCategories] = useState([]);
+
+    // to listen the responce of notification
+    const notificationListener = useRef();
+    const responseListener = useRef();
+    const [notification, setNotification] = useState(false);
 
 
     const onRefresh = React.useCallback(() => {
@@ -93,6 +99,23 @@ function HomeScreen(props) {
         getAllCategories();
         getAllProducts();
         getUser()
+
+
+
+        // to listen the responce of notification
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+            setNotification(notification);
+        });
+
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+            console.log("response notification ");
+            props.navigation.navigate("riderScreen")
+        });
+
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener.current);
+            Notifications.removeNotificationSubscription(responseListener.current);
+        };
     }, []);
 
     const handleLogout = async () => {
