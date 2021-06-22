@@ -19,7 +19,9 @@ import { useEffect } from 'react';
 function ProfileScreen(props) {
     const [indicator, setIndicator] = useState(false);
     const [toastify, setToastify] = useState();
-    const [currentUser, setCurrentUser] = useState({});
+    const [currentUser, setCurrentUser] = useState({
+        name: 'A'
+    });
     const [feilds, setFeilds] = useState([
         {
             id: 0,
@@ -118,7 +120,7 @@ function ProfileScreen(props) {
                 <View style={{ marginTop: RFPercentage(2), width: '93%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} >
                     <MaterialCommunityIcons onPress={() => props.navigation.navigate('homeScreen')} size={RFPercentage(3.8)} color={colors.white} name="chevron-left" />
                     <Text style={{ color: colors.white, fontSize: RFPercentage(3), fontFamily: "sans-serif-medium" }} >Profile</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleSubmit()} >
                         <Text style={{ color: colors.white, fontSize: RFPercentage(2.8), fontFamily: "sans-serif-medium" }} >Save</Text>
                     </TouchableOpacity>
                 </View>
