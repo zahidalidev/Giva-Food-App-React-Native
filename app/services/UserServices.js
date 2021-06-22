@@ -92,6 +92,7 @@ export const getRiderPushTokens = async (role) => {
             let body = {
                 "to": temp.notificationToken,
                 "sound": "default",
+                "title": "Order!",
                 "body": "You have a new Order!"
             }
             res2.push(body)

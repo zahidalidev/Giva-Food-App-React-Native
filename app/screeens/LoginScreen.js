@@ -57,6 +57,7 @@ function LoginScreen(props) {
                 alert('Failed to get push token for push notification!');
                 return;
             }
+            // token = (await Notifications.getDevicePushTokenAsync()).data;
             token = (await Notifications.getExpoPushTokenAsync()).data;
             console.log(Platform.OS, "  ", token);
         } else {
