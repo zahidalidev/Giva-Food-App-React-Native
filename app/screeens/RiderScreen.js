@@ -10,6 +10,7 @@ import OrderCard from '../components/OrderCard';
 
 // services
 import { deleteOrder, getAllNewOrders, getOrderRef, updateOrder } from '../services/OrderServices';
+import { getRiderPushTokens } from "../services/UserServices"
 
 // new Order = !item.taken
 // taken = taken && !confirm
@@ -55,7 +56,14 @@ function RiderScreen(props) {
         tempOrders[index].confirm = true;
 
         let docId = tempOrders[index].docId;
-        await updateExistingOrder(docId, tempOrders[index])
+        try {
+            await updateExistingOrder(docId, tempOrders[index])
+
+            // sending notification to restaurant
+            await getRiderPushTokens('restaurant')
+        } catch (error) {
+
+        }
 
         setProducts(tempOrders)
     }

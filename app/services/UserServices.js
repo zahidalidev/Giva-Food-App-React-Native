@@ -23,6 +23,7 @@ export const addUser = async (body) => {
 export const loginUser = async (email, password, notificationToken) => {
     const snapshot = await userRef.where('email', '==', email).where('password', '==', password).get();
     if (snapshot.empty) {
+        // console.log('res: ', email, password)
         return false;
     }
 

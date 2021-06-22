@@ -100,8 +100,6 @@ function HomeScreen(props) {
         getAllProducts();
         getUser()
 
-
-
         // to listen the responce of notification
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
@@ -109,7 +107,7 @@ function HomeScreen(props) {
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
             console.log("response notification ");
-            props.navigation.navigate("riderScreen")
+            handleProfiles()
         });
 
         return () => {
