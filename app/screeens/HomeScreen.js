@@ -5,6 +5,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
+import { Restart } from 'fiction-expo-restart';
 
 // Components
 import AppTextInput from '../components/AppTextInput';
@@ -125,9 +126,12 @@ function HomeScreen(props) {
         try {
             await AsyncStorage.removeItem('user');
             await AsyncStorage.removeItem('product');
+
+            Restart();
             props.navigation.navigate('loginScreen')
         } catch (error) {
-            alert("Logout Error")
+            alert("Logout Error: ", error)
+            console.log("Logout Error: ", error)
         }
     }
 

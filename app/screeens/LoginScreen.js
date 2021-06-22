@@ -19,6 +19,7 @@ import AccountText from '../components/common/AccountText';
 function LoginScreen(props) {
     const [indicator, setIndicator] = useState(false);
     const [toastify, setToastify] = useState();
+    const [notificationToken, setNotificationToken] = useState(null);
     const [feilds, setFeilds] = useState([
         {
             id: 0,
@@ -71,7 +72,7 @@ function LoginScreen(props) {
             });
         }
 
-        return token
+        setNotificationToken(token)
     }
 
     const handleSubmit = async () => {
@@ -79,7 +80,7 @@ function LoginScreen(props) {
         const password = feilds[1].value;
         try {
             setIndicator(true)
-            let notificationToken = await registerForPushNotificationsAsync()
+
             const res = await loginUser(email, password, notificationToken);
             if (!res) {
                 setIndicator(false)
@@ -112,6 +113,7 @@ function LoginScreen(props) {
     }
 
     useEffect(() => {
+        registerForPushNotificationsAsync()
         validateCurrentUser();
     }, [props.route.params]);
 

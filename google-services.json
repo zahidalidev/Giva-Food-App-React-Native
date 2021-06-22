@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "103929713302",
+    "project_id": "givafood-f0e10",
+    "storage_bucket": "givafood-f0e10.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103929713302:android:face0a208eae2d6065a8b7",
+        "android_client_info": {
+          "package_name": "com.zahidalidev.foodapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103929713302-kf7ljivuldr9btlte7iac5g48q6lor8h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zahidalidev.foodapp",
+            "certificate_hash": "bfa85b823d100a92f733d8c4d2c8fbc02b4212ce"
+          }
+        },
+        {
+          "client_id": "103929713302-1ispe8cirvhccgmeet971gu70svnqcpo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJaArYIEj3WxSowtpSUl0owDa7rMpg7WI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103929713302-1ispe8cirvhccgmeet971gu70svnqcpo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
