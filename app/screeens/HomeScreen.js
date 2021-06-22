@@ -109,6 +109,7 @@ function HomeScreen(props) {
         // to listen the responce of notification
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
+            console.log("received: ", notification)
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {

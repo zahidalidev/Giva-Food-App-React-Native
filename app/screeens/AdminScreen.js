@@ -320,7 +320,6 @@ function AdminScreen(props) {
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
                 <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('homeScreen')} />
                 <Appbar.Content color={colors.white} title="Admin Panel" />
-                <Appbar.Action color={colors.white} icon="import" onPress={() => handleLogout()} />
             </Appbar.Header>
 
             {/* toast component */}
