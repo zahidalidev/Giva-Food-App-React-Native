@@ -16,6 +16,7 @@ import AppTextButton from '../components/AppTextButton';
 
 // services
 import { orderCart } from "../services/OrderServices";
+import { getRiderPushTokens } from "../services/UserServices"
 
 function CartScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
@@ -133,8 +134,11 @@ function CartScreen(props) {
                     confirm: false,
                     taken: false
                 }
-                await orderCart(orderObj);
-                toastify.success("Order Successfull")
+
+                // await orderCart(orderObj);
+                // toastify.success("Order Successfull")
+                console.log("here ")
+                await getRiderPushTokens('rider')
 
             } catch (error) {
                 toastify.error("Order Not Completed: ", error)

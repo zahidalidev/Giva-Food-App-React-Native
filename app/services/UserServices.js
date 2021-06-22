@@ -1,5 +1,6 @@
 import firebase from "firebase"
 import "firebase/firestore"
+import { SentNotification } from "../components/common/SendNotification";
 
 import { firebaseConfig } from "../config/db"
 
@@ -72,6 +73,33 @@ export const updateUser = async (id, body) => {
         });
 
         return res2;
+    } catch (error) {
+        return false
+    }
+}
+
+export const getRiderPushTokens = async (role) => {
+    const snapshot2 = await userRef.where('role', '==', role).get();
+    if (snapshot2.empty) {
+        return false;
+    }
+
+    let res2 = []
+    snapshot2.forEach(doc => {
+        let temp = doc.data();
+        if (temp.notificationToken) {
+            let body = {
+                "to": temp.notificationToken,
+                "sound": "default",
+                "body": "You have a new Order!"
+            }
+            res2.push(body)
+        }
+    });
+
+    try {
+        await SentNotification(res2)
+        return true
     } catch (error) {
         return false
     }
