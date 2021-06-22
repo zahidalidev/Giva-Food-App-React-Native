@@ -133,6 +133,7 @@ function AdminScreen(props) {
     }
 
     const getAllCategories = async () => {
+        setActivityIndic(true)
         try {
             let categoryRef = await getCategories();
 
@@ -167,6 +168,7 @@ function AdminScreen(props) {
             toastify.error("Categories not found please add them");
             console.log("Categories found: ", error)
         }
+        setActivityIndic(false)
     }
     useEffect(() => {
         getAllCategories()
@@ -212,6 +214,7 @@ function AdminScreen(props) {
     }
 
     const handleCategory = async () => {
+        setActivityIndic(true)
         if (category === '') {
             toastify.error("Title is empty")
             return;
@@ -226,6 +229,7 @@ function AdminScreen(props) {
         } catch (error) {
             console.log("category add: ", error)
         }
+        setActivityIndic(false)
     }
 
     const handleChangeProduct = (text, index) => {
@@ -235,6 +239,8 @@ function AdminScreen(props) {
     }
 
     const handleProduct = async () => {
+        setActivityIndic(true)
+
         const title = foodFeils[0].value
         const price = foodFeils[1].value
         const description = foodFeils[2].value
@@ -266,9 +272,12 @@ function AdminScreen(props) {
         } catch (error) {
             console.log("product added erro: ", error)
         }
+        setActivityIndic(false)
     }
 
     const handleEmploy = async (type) => {
+        setActivityIndic(true)
+
         let body = {};
 
         if (type === 'rider') {
@@ -301,6 +310,7 @@ function AdminScreen(props) {
         } catch (error) {
             console.log("Rider add error: ", error)
         }
+        setActivityIndic(false)
     }
 
     return (
@@ -318,7 +328,7 @@ function AdminScreen(props) {
 
             <View style={styles.container}>
                 {activityIndic
-                    ? <View style={{ flexDirection: 'column', marginTop: -RFPercentage(7), borderTopLeftRadius: RFPercentage(8), backgroundColor: colors.lightGrey, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
+                    ? <View style={{ flexDirection: 'column', marginTop: RFPercentage(2), borderTopLeftRadius: RFPercentage(8), backgroundColor: colors.lightGrey, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
                         <ActivityIndicator color={colors.primary} size={RFPercentage(6)} />
                     </View>
                     : <>

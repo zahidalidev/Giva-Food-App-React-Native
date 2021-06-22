@@ -60,3 +60,7 @@ export const getProducts = async () => {
 
     return res;
 }
+
+export const getProductRef = async () => {
+    return productRef;
+}

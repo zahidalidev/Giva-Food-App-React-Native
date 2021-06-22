@@ -14,7 +14,7 @@ import CategoryCard from "../components/CategoryCard";
 // config
 import colors from '../config/colors';
 import { getAllNewCategories, getCategories } from '../services/CategoryServices';
-import { getProducts } from "../services/ProductServices";
+import { getProductRef, getProducts } from "../services/ProductServices";
 // import GetSqlDate from '../components/commmon/GetSqlDate';
 
 const windowWidth = Dimensions.get('window').width;
@@ -45,14 +45,19 @@ function HomeScreen(props) {
     }
 
     const getAllProducts = async () => {
+
         try {
             setActivityIndic(true)
-            let res = await getProducts();
-            setAllProducts(res)
+            let productRef = await getProductRef();
 
+            const observer = productRef.onSnapshot(querySnapshot => {
+                querySnapshot.docChanges().forEach(async (change) => {
+                    let productRes = await getProducts();
+                    setAllProducts(productRes)
+                });
+            });
         } catch (error) {
-            // toastify.error("Categories not found please add them");
-            console.log("Categories found: ", error)
+            console.log("Products found: ", error)
         }
         setRefreshing(false)
         setActivityIndic(false);
