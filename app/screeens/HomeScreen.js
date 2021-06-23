@@ -127,7 +127,7 @@ function HomeScreen(props) {
             await AsyncStorage.removeItem('user');
             await AsyncStorage.removeItem('product');
 
-            Restart();
+            // Restart();
             props.navigation.navigate('loginScreen')
         } catch (error) {
             alert("Logout Error: ", error)

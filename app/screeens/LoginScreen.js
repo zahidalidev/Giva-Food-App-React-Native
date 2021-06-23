@@ -88,7 +88,17 @@ function LoginScreen(props) {
             }
             await AsyncStorage.setItem('user', JSON.stringify(res));
             setIndicator(false)
-            props.navigation.navigate('homeScreen')
+
+            if (res.role === 'admin') {
+                props.navigation.navigate('adminScreen')
+            } else if (res.role === 'rider') {
+                props.navigation.navigate('riderScreen')
+            } else if (res.role === 'restaurant') {
+                props.navigation.navigate('resturentScreen')
+            } else {
+                props.navigation.navigate('homeScreen')
+            }
+
         } catch (error) {
             console.log("login error: ", error);
             setIndicator(false)
@@ -102,7 +112,15 @@ function LoginScreen(props) {
         try {
             let res = await AsyncStorage.getItem('user');
             if (res) {
-                props.navigation.navigate('homeScreen')
+                if (res.role === 'admin') {
+                    props.navigation.navigate('adminScreen')
+                } else if (res.role === 'rider') {
+                    props.navigation.navigate('riderScreen')
+                } else if (res.role === 'restaurant') {
+                    props.navigation.navigate('resturentScreen')
+                } else {
+                    props.navigation.navigate('homeScreen')
+                }
                 return;
             }
             props.navigation.navigate('loginScreen');
