@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Platform, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { Platform, StyleSheet, Text, View, ActivityIndicator, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants'
 import { RFPercentage } from 'react-native-responsive-fontsize';
@@ -28,18 +28,24 @@ function RegisterScreen(props) {
         },
         {
             id: 2,
-            placeHolder: "email",
+            placeHolder: "Email",
             value: '',
             secure: false
         },
         {
             id: 3,
+            placeHolder: "Full Address",
+            value: '',
+            secure: false
+        },
+        {
+            id: 4,
             placeHolder: "Password",
             value: '',
             secure: true
         },
         {
-            id: 4,
+            id: 5,
             placeHolder: "Confirm password",
             value: '',
             secure: true
@@ -62,15 +68,16 @@ function RegisterScreen(props) {
             name: feilds[0].value.trim(),
             contactNumber: feilds[1].value.trim(),
             email: feilds[2].value.trim().toLowerCase(),
-            password: feilds[3].value.trim()
+            address: feilds[3].value.trim(),
+            password: feilds[4].value.trim()
         }
 
-        if (body.password !== feilds[4].value) {
+        if (body.password !== feilds[5].value) {
             alert("Check Password and Confirm Password");
             return;
         }
 
-        if (body.name === '' || body.email === '' || body.password === '') {
+        if (body.name === '' || body.email === '' || body.address === '' || body.password === '') {
             alert("Please fill all the feilds");
             return;
         }
@@ -114,35 +121,37 @@ function RegisterScreen(props) {
                 : <>
                     {/* Bottom Contaienr */}
                     <View style={{ marginTop: -RFPercentage(7), borderTopLeftRadius: RFPercentage(8), backgroundColor: colors.lightGrey, width: "100%", flex: 1.8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
-                        {/* Text feilds */}
-                        {feilds.map((item, i) =>
-                            <View key={i} style={{ marginTop: i == 0 ? RFPercentage(10) : RFPercentage(4), width: "85%" }} >
-                                <AppTextInput
-                                    placeHolder={item.placeHolder}
+                        <ScrollView style={{ width: '100%' }} >
+                            {/* Text feilds */}
+                            {feilds.map((item, i) =>
+                                <View key={i} style={{ marginLeft: '7.5%', marginTop: i == 0 ? RFPercentage(8) : RFPercentage(4), width: "85%" }} >
+                                    <AppTextInput
+                                        placeHolder={item.placeHolder}
+                                        width="100%"
+                                        value={item.value}
+                                        onChange={(text) => handleChange(text, item.id)}
+                                        secure={item.secure}
+                                    />
+                                </View>
+                            )}
+
+                            {/* SignUp button */}
+                            <View style={{ marginBottom: RFPercentage(3), marginLeft: '7.5%', marginTop: RFPercentage(5), width: "85%", flex: 1, alignItems: "flex-end" }} >
+                                <AppTextButton
+                                    name="Sign Up"
+                                    borderRadius={RFPercentage(1.3)}
+                                    onSubmit={() => handleSubmit()}
+                                    backgroundColor={colors.primary}
                                     width="100%"
-                                    value={item.value}
-                                    onChange={(text) => handleChange(text, item.id)}
-                                    secure={item.secure}
+                                    height={RFPercentage(5.5)}
                                 />
                             </View>
-                        )}
 
-                        {/* SignUp button */}
-                        <View style={{ marginTop: RFPercentage(5), width: "85%", flex: 1, alignItems: "flex-end" }} >
-                            <AppTextButton
-                                name="Sign Up"
-                                borderRadius={RFPercentage(1.3)}
-                                onSubmit={() => handleSubmit()}
-                                backgroundColor={colors.primary}
-                                width="100%"
-                                height={RFPercentage(5.5)}
-                            />
-                        </View>
-
+                            {/* Signup text */}
+                            <AccountText navigate={props.navigation.navigate} description="Already have an account? " buttnText="Sign In" location="loginScreen" />
+                        </ScrollView>
                     </View>
 
-                    {/* Signup text */}
-                    <AccountText navigate={props.navigation.navigate} description="Already have an account? " buttnText="Sign In" location="loginScreen" />
                 </>
             }
         </View>
