@@ -153,13 +153,13 @@ function RiderScreen(props) {
                                         keyExtractor={(item, index) => index.toString()}
                                         renderItem={({ item, index }) => {
                                             return !item.taken ?
-                                                <TouchableOpacity activeOpacity={0.7} style={{
+                                                <TouchableOpacity activeOpacity={0.9} style={{
                                                     margin: RFPercentage(1),
-                                                    marginLeft: "6%",
+                                                    marginLeft: "4%",
+                                                    padding: RFPercentage(1),
                                                     backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
-                                                    // maxHeight: item.blank ? 0 : null,
-                                                    width: "100%",
-                                                    // height: RFPercentage(20),
+                                                    width: "90%",
+                                                    elevation: 3,
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
@@ -185,13 +185,13 @@ function RiderScreen(props) {
                                         keyExtractor={(item, index) => index.toString()}
                                         renderItem={({ item, index }) => {
                                             return item.confirm ?
-                                                <TouchableOpacity activeOpacity={0.7} style={{
+                                                <TouchableOpacity activeOpacity={0.9} style={{
                                                     margin: RFPercentage(1),
-                                                    marginLeft: "6%",
+                                                    marginLeft: "4%",
+                                                    padding: RFPercentage(1),
                                                     backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
-                                                    // maxHeight: item.blank ? 0 : null,
-                                                    width: "100%",
-                                                    // height: RFPercentage(20),
+                                                    width: "90%",
+                                                    elevation: 3,
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
@@ -218,13 +218,13 @@ function RiderScreen(props) {
                                         keyExtractor={(item, index) => index.toString()}
                                         renderItem={({ item, index }) => {
                                             return (item.taken && !item.confirm) ?
-                                                <TouchableOpacity activeOpacity={0.7} style={{
+                                                <TouchableOpacity activeOpacity={0.9} style={{
                                                     margin: RFPercentage(1),
-                                                    marginLeft: "6%",
+                                                    marginLeft: "4%",
+                                                    padding: RFPercentage(1),
                                                     backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
-                                                    // maxHeight: item.blank ? 0 : null,
-                                                    width: "100%",
-                                                    // height: RFPercentage(20),
+                                                    width: "90%",
+                                                    elevation: 3,
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
