@@ -204,15 +204,6 @@ function AdminScreen(props) {
         }
     }
 
-    const handleLogout = async () => {
-        try {
-            await AsyncStorage.removeItem('user');
-            props.navigation.navigate('loginScreen')
-        } catch (error) {
-            alert("Logout Error")
-        }
-    }
-
     const handleCategory = async () => {
         setActivityIndic(true)
         if (category === '') {
@@ -283,18 +274,18 @@ function AdminScreen(props) {
         if (type === 'rider') {
             body = {
                 name: ridersfeilds[0].value,
-                email: ridersfeilds[1].value,
+                email: ridersfeilds[1].value.trim().toLowerCase(),
                 contactNumber: ridersfeilds[2].value,
                 address: ridersfeilds[3].value,
-                password: ridersfeilds[4].value,
+                password: ridersfeilds[4].value.trim(),
                 role: "rider"
             }
         } else {
             body = {
                 name: restaurantfeilds[0].value,
-                email: restaurantfeilds[1].value,
+                email: restaurantfeilds[1].value.trim().toLowerCase(),
                 address: restaurantfeilds[2].value,
-                password: restaurantfeilds[3].value,
+                password: restaurantfeilds[3].value.trim(),
                 role: "restaurant"
             }
         }
