@@ -29,7 +29,7 @@ function OrderCard({ showCompletedBtn = false, index, details, showConfirm, show
                 {
                     details.products.map((item, index) =>
                         <View key={index} style={{ marginLeft: RFPercentage(2), flexDirection: "row", width: "100%", alignItems: "center" }} >
-                            <Text numberOfLines={1} style={{ marginRight: 10, color: colors.black, fontSize: RFPercentage(2.2) }} >{item.title}</Text>
+                            <Text numberOfLines={1} style={{ marginRight: 10, color: colors.black, fontSize: RFPercentage(2.2) }} >{`-${index + 1} ${item.title}`}</Text>
                             <Text numberOfLines={1} style={{ marginRight: 10, color: colors.black, fontSize: RFPercentage(2.2) }} >{item.price}</Text>
                             <Text numberOfLines={1} style={{ color: colors.black, fontSize: RFPercentage(2.2) }} >Quantity: {item.quantity}</Text>
                         </View>
