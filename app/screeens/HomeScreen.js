@@ -78,7 +78,6 @@ function HomeScreen(props) {
                 });
             });
         } catch (error) {
-            // toastify.error("Categories not found please add them");
             console.log("Categories found: ", error)
         }
         setRefreshing(false)

@@ -8,11 +8,9 @@ import AppTextInput from '../components/AppTextInput';
 import colors from '../config/colors';
 import AppTextButton from '../components/AppTextButton';
 import { addUser } from '../services/UserServices';
-import Toast from 'toastify-react-native';
 import AccountText from '../components/common/AccountText';
 
 function RegisterScreen(props) {
-    const [toastify, setToastify] = useState();
     const [indicator, setIndicator] = useState(false);
 
     const [feilds, setFeilds] = useState([
@@ -68,12 +66,12 @@ function RegisterScreen(props) {
         }
 
         if (body.password !== feilds[4].value) {
-            toastify.error("Check Password and Confirm Password");
+            alert("Check Password and Confirm Password");
             return;
         }
 
         if (body.name === '' || body.email === '' || body.password === '') {
-            toastify.error("Please fill all the feilds");
+            alert("Please fill all the feilds");
             return;
         }
 
@@ -82,20 +80,20 @@ function RegisterScreen(props) {
         try {
             const res = await addUser(body);
             if (!res) {
-                toastify.error("Registration Failed");
+                alert("Registration Failed");
                 setIndicator(false);
                 return;
             }
 
             setIndicator(false);
-            toastify.success("Registration Successful");
+            alert("Registration Successful");
 
             setTimeout(() => {
                 props.navigation.navigate('loginScreen')
             }, 2000)
 
         } catch (error) {
-            toastify.error("Registration Failed");
+            alert("Registration Failed");
             setIndicator(false);
         }
     }
@@ -104,7 +102,6 @@ function RegisterScreen(props) {
         <View style={styles.container}>
             <StatusBar position="bottom" style="light" backgroundColor={colors.primary} />
 
-            <Toast style={{ fontSize: 10 }} ref={(t) => setToastify(t)} />
             {/* Kitchen buddy top container */}
             <View style={{ backgroundColor: colors.primary, flex: 0.6, width: "100%", flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
                 <Text style={{ marginBottom: RFPercentage(5), color: colors.white, fontSize: Platform.OS === "ios" ? RFPercentage(4) : RFPercentage(6.5) }} >Sign Up</Text>

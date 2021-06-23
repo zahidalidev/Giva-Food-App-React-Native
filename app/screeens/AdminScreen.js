@@ -4,7 +4,6 @@ import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
-import Toast from "toastify-react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ReactNativeCrossPicker from "react-native-cross-picker"
 
@@ -29,7 +28,6 @@ function AdminScreen(props) {
     const [categoryImage, setCategoryImage] = useState(false);
     const [imageCategorySelected, setCategoryImageSelected] = useState(false);
 
-    const [toastify, setToastify] = useState();
     const [category, setCategory] = useState('');
     const [selectedCategory, setDropCategory] = useState('')
     const [allCategories, setAllCategories] = useState([])
@@ -165,7 +163,7 @@ function AdminScreen(props) {
             });
 
         } catch (error) {
-            toastify.error("Categories not found please add them");
+            alert("Categories not found please add them");
             console.log("Categories found: ", error)
         }
         setActivityIndic(false)
@@ -207,15 +205,15 @@ function AdminScreen(props) {
     const handleCategory = async () => {
         setActivityIndic(true)
         if (category === '') {
-            toastify.error("Title is empty")
+            alert("Title is empty")
             return;
         }
         try {
             const res = await addCategory(category, categoryImage)
             if (res) {
-                toastify.success("Category Added")
+                alert("Category Added")
             } else {
-                toastify.error("Something went wrong!")
+                alert("Something went wrong!")
             }
         } catch (error) {
             console.log("category add: ", error)
@@ -238,7 +236,7 @@ function AdminScreen(props) {
         const category = selectedCategory;
 
         if (title === '' || price === '' || description === '' || category === '') {
-            toastify.error("All fields are required")
+            alert("All fields are required")
             return;
         }
 
@@ -254,11 +252,11 @@ function AdminScreen(props) {
             if (!res) {
                 console.log("product added erro: ", res)
 
-                toastify.error("Product Not Added");
+                alert("Product Not Added");
                 return;
             }
 
-            toastify.success("Product Added");
+            alert("Product Added");
 
         } catch (error) {
             console.log("product added erro: ", error)
@@ -293,10 +291,10 @@ function AdminScreen(props) {
         try {
             const res = await addUser(body);
             if (!res) {
-                toastify.error("Rider Not Added !")
+                alert("Rider Not Added !")
                 return;
             }
-            toastify.success("Rider Added")
+            alert("Rider Added")
 
         } catch (error) {
             console.log("Rider add error: ", error)
@@ -312,9 +310,6 @@ function AdminScreen(props) {
                 <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('homeScreen')} />
                 <Appbar.Content color={colors.white} title="Admin Panel" />
             </Appbar.Header>
-
-            {/* toast component */}
-            <Toast ref={(c) => setToastify(c)} />
 
             <View style={styles.container}>
                 {activityIndic

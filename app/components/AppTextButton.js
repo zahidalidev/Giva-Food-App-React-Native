@@ -4,9 +4,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Button } from 'react-native-paper';
 
-function AppTextButton({ name, icon, onSubmit, width, height = RFPercentage(6), borderRadius = 25, backgroundColor = "black", iconSize = 20, iconLeft, buttonStyle, textStyle }) {
+function AppTextButton({ disabled = false, name, icon, onSubmit, width, height = RFPercentage(6), borderRadius = 25, backgroundColor = "black", iconSize = 20, iconLeft, buttonStyle, textStyle }) {
     return (
-        <Button width={width} color={backgroundColor} mode="contained" onPress={() => onSubmit()} style={{ height, borderBottomEndRadius: borderRadius, borderBottomStartRadius: borderRadius, borderTopStartRadius: borderRadius, justifyContent: "center", ...buttonStyle }} >
+        <Button disabled={disabled} width={width} color={backgroundColor} mode="contained" onPress={() => onSubmit()} style={{ height, borderBottomEndRadius: borderRadius, borderBottomStartRadius: borderRadius, borderTopStartRadius: borderRadius, justifyContent: "center", ...buttonStyle }} >
 
             {
                 iconLeft ?

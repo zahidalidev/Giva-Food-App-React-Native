@@ -5,7 +5,6 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
 import AlertAsync from "react-native-alert-async";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from "toastify-react-native";
 
 // Components
 import CartCard from '../components/CartCard';
@@ -24,8 +23,6 @@ function CartScreen(props) {
     const [refreshing, setRefreshing] = useState(false);
     const [products, setProducts] = useState([]);
     const [newTotalPrice, setNewTotalPrice] = useState([]);
-    const [toastify, setToastify] = useState();
-
 
     const getCartProducts = async () => {
         try {
@@ -136,12 +133,12 @@ function CartScreen(props) {
                 }
 
                 await orderCart(orderObj);
-                toastify.success("Order Successfull")
+                alert("Order Successfull")
                 await getRiderPushTokens('rider')
 
             } catch (error) {
                 console.log("Order Not Completed: ", error)
-                toastify.error("Order Not Completed: ", error)
+                alert("Order Not Completed: ", error)
             }
         }
     }
@@ -180,9 +177,6 @@ function CartScreen(props) {
                 <Appbar.Content color={colors.white} title={`Cart (${products.length})`} />
                 {/* <Appbar.Action color={colors.white} icon="account-circle" onPress={() => { }} /> */}
             </Appbar.Header>
-
-            {/* toast component */}
-            <Toast ref={(c) => setToastify(c)} />
 
             <View style={styles.container}>
                 {activityIndic
@@ -231,13 +225,17 @@ function CartScreen(props) {
                             />
 
                             <View style={{ backgroundColor: colors.white, alignItems: "center", width: "100%", position: "absolute", bottom: 0, paddingBottom: RFPercentage(4) }} >
-                                <View style={{ padding: RFPercentage(2), width: "50%", justifyContent: "space-evenly", flexDirection: "row" }} >
-                                    <Text style={{ fontSize: RFPercentage(2.8) }} >Total</Text>
-                                    <Text style={{ fontSize: RFPercentage(2.8), fontWeight: "bold" }}>{newTotalPrice}</Text>
-                                </View>
+                                {
+                                    products.length === 0 ? null :
+                                        <View style={{ padding: RFPercentage(2), width: "50%", justifyContent: "space-evenly", flexDirection: "row" }} >
+                                            <Text style={{ fontSize: RFPercentage(2.8) }} >Total</Text>
+                                            <Text style={{ fontSize: RFPercentage(2.8), fontWeight: "bold" }}>${newTotalPrice}</Text>
+                                        </View>
+                                }
                                 <AppTextButton
                                     name="Order"
                                     width="80%"
+                                    disabled={products.length === 0 ? true : false}
                                     borderRadius={RFPercentage(1.3)}
                                     backgroundColor={colors.secondary}
                                     onSubmit={() => orderNow()}

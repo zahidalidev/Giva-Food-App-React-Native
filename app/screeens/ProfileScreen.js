@@ -4,7 +4,6 @@ import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants'
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from "toastify-react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 import AppTextInput from '../components/AppTextInput';
@@ -18,7 +17,6 @@ import { useEffect } from 'react';
 
 function ProfileScreen(props) {
     const [indicator, setIndicator] = useState(false);
-    const [toastify, setToastify] = useState();
     const [currentUser, setCurrentUser] = useState({
         name: 'A'
     });
@@ -76,12 +74,12 @@ function ProfileScreen(props) {
             await AsyncStorage.setItem('user', JSON.stringify(res));
 
             setIndicator(false)
-            toastify.success("User Updated");
+            alert("User Updated");
             getCurrentUser()
         } catch (error) {
             console.log("Updation error: ", error);
             setIndicator(false)
-            toastify.error("Updation Error");
+            alert("Updation Error");
         }
     }
 
@@ -111,9 +109,6 @@ function ProfileScreen(props) {
     return (
         <View style={styles.container}>
             <StatusBar style="light" backgroundColor={colors.primary} />
-
-            {/* toast component */}
-            <Toast ref={(c) => setToastify(c)} />
 
             {/* Kitchen buddy top container */}
             <View style={{ backgroundColor: colors.primary, width: "100%", flex: 0.8, flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }} >

@@ -4,7 +4,6 @@ import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants'
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from "toastify-react-native";
 import * as Notifications from 'expo-notifications';
 
 import AppTextInput from '../components/AppTextInput';
@@ -18,7 +17,6 @@ import AccountText from '../components/common/AccountText';
 
 function LoginScreen(props) {
     const [indicator, setIndicator] = useState(false);
-    const [toastify, setToastify] = useState();
     const [notificationToken, setNotificationToken] = useState(null);
     const [feilds, setFeilds] = useState([
         {
@@ -85,7 +83,7 @@ function LoginScreen(props) {
             const res = await loginUser(email, password, notificationToken);
             if (!res) {
                 setIndicator(false)
-                toastify.error("Login Error: ", res);
+                alert("Login Error: ", res)
                 return;
             }
             await AsyncStorage.setItem('user', JSON.stringify(res));
@@ -94,7 +92,7 @@ function LoginScreen(props) {
         } catch (error) {
             console.log("login error: ", error);
             setIndicator(false)
-            toastify.error("Login Error");
+            alert("Login Error: ", error)
         }
     }
 
@@ -121,9 +119,6 @@ function LoginScreen(props) {
     return (
         <View style={styles.container}>
             <StatusBar style="light" backgroundColor={colors.primary} />
-
-            {/* toast component */}
-            <Toast ref={(c) => setToastify(c)} />
 
             {/* Kitchen buddy top container */}
             <View style={{ backgroundColor: colors.primary, width: "100%", flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
