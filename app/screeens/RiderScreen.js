@@ -163,7 +163,7 @@ function RiderScreen(props) {
                                                     flexDirection: "column",
                                                 }} >
                                                     {item.blank ? null :
-                                                        <OrderCard index={index} showConfirm={true} showTaken={true} showDelete={true} onConfirm={() => handleOrderConfirm(index)} onTaken={() => handleOrderTaken(index)} onDelete={() => handleOrderDelete(index)} details={item} />
+                                                        <OrderCard index={index} showTaken={true} onTaken={() => handleOrderTaken(index)} details={item} />
                                                     }
                                                 </TouchableOpacity> : null
                                         }
