@@ -133,3 +133,27 @@ export const getRiderPushTokens = async (role) => {
         return false
     }
 }
+
+export const getAllNewRes = async () => {
+    const snapshot2 = await userRef.where('role', '==', 'restaurant').get();
+    if (snapshot2.empty) {
+        return false;
+    }
+
+    let res2 = []
+    snapshot2.forEach(doc => {
+        let temp = doc.data()
+        let temp2 = {}
+        temp2.label = temp.name;
+        temp2.value = temp.name;
+        temp2.email = temp.email;
+        res2.push(temp2)
+    });
+
+    return res2;
+
+}
+
+export const getUserRef = async () => {
+    return userRef;
+}

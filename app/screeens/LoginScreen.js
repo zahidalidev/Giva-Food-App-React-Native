@@ -83,7 +83,7 @@ function LoginScreen(props) {
             const res = await loginUser(email, password, notificationToken);
             if (!res) {
                 setIndicator(false)
-                alert("Login Error: ", res)
+                alert("Email or Password is incorrect")
                 return;
             }
             await AsyncStorage.setItem('user', JSON.stringify(res));
@@ -102,7 +102,7 @@ function LoginScreen(props) {
         } catch (error) {
             console.log("login error: ", error);
             setIndicator(false)
-            alert("Login Error: ", error)
+            alert("Email or Password is incorrect")
         }
     }
 

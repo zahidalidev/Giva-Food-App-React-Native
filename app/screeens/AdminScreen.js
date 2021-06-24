@@ -16,7 +16,7 @@ import AppTextButton from '../components/AppTextButton';
 import { addCategory, getCategories } from '../services/CategoryServices';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { addProduct } from '../services/ProductServices';
-import { addUser } from '../services/UserServices';
+import { addUser, getAllNewRes, getUserRef } from '../services/UserServices';
 
 function AdminScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
@@ -33,6 +33,12 @@ function AdminScreen(props) {
     const [category, setCategory] = useState('');
     const [selectedCategory, setDropCategory] = useState('')
     const [allCategories, setAllCategories] = useState([])
+
+    const [res, setRes] = useState('');
+    const [selectedRes, setDropRes] = useState('')
+    const [allRes, setAllRes] = useState([])
+
+
 
     const iconComponent = () => {
         return <MaterialCommunityIcons
@@ -170,8 +176,37 @@ function AdminScreen(props) {
         }
         setActivityIndic(false)
     }
+
+
+    const getAllRes = async () => {
+        setActivityIndic(true)
+        try {
+            try {
+                setActivityIndic(true)
+                let userRef = await getUserRef();
+
+                const observer = userRef.onSnapshot(querySnapshot => {
+                    querySnapshot.docChanges().forEach(async (change) => {
+                        let res = await getAllNewRes()
+                        setAllRes(res)
+                    });
+                });
+            } catch (error) {
+                console.log("Categories found: ", error)
+            }
+            setRefreshing(false)
+            setActivityIndic(false);
+
+        } catch (error) {
+            alert("Categories not found please add them");
+            console.log("Categories found: ", error)
+        }
+        setActivityIndic(false)
+    }
+
     useEffect(() => {
         getAllCategories()
+        getAllRes()
     }, [])
 
     const uploadImages = async (evetnType) => {
@@ -368,6 +403,16 @@ function AdminScreen(props) {
                                             setItem={setDropCategory} selectedItem={selectedCategory}
                                             placeholder="Select Category"
                                             modalMarginTop={"70%"} // popup model margin from the top 
+                                        />
+
+                                        <ReactNativeCrossPicker
+                                            modalTextStyle={{ color: "rgb(0, 74, 173)" }}
+                                            mainComponentStyle={{ marginTop: RFPercentage(4), width: "85%", borderWidth: 0, backgroundColor: Colors.white }}
+                                            iconComponent={iconComponent}
+                                            items={allRes}
+                                            setItem={setDropRes} selectedItem={selectedRes}
+                                            placeholder="Select Resturant"
+                                            modalMarginTop={"90%"} // popup model margin from the top 
                                         />
 
                                         <TouchableOpacity onPress={() => uploadImages("product")} style={{ justifyContent: "flex-start", alignItems: "center", flexDirection: "row", marginTop: RFPercentage(4), width: "85%", }} >
