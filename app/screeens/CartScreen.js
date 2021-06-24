@@ -116,6 +116,7 @@ function CartScreen(props) {
                     obj.title = tempProducts[i].title;
                     obj.price = tempProducts[i].price;
                     obj.quantity = tempProducts[i].quantity;
+                    obj.restaurant = tempProducts[i].restaurant;
                     totalProducts.push(obj);
                 }
                 let res = await AsyncStorage.getItem('user');

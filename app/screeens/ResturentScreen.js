@@ -3,6 +3,7 @@ import { Text, RefreshControl, ActivityIndicator, Dimensions, FlatList, StyleShe
 import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // config
 import colors from '../config/colors';
@@ -50,6 +51,9 @@ function ResturentScreen(props) {
     }, [])
 
     const getAllOrders = async () => {
+        let user = await AsyncStorage.getItem('user');
+        user = JSON.parse(user);
+
         try {
             setRefreshing(true);
             let categoryRef = await getOrderRef();
@@ -57,6 +61,15 @@ function ResturentScreen(props) {
             const observer = categoryRef.onSnapshot(querySnapshot => {
                 querySnapshot.docChanges().forEach(async (change) => {
                     let res = await getAllNewOrders()
+
+                    let temp = [];
+                    for (let i = 0; i < res.length; i++) {
+                        res[i].products = res[i].products.filter(item => item.restaurant == user.email)
+                        temp.push(res[i]);
+                    }
+
+                    console.log('temp: ', temp)
+
                     setProducts(res)
                 });
             });
@@ -105,8 +118,10 @@ function ResturentScreen(props) {
                                             flexDirection: "column",
                                         }} >
                                             {item.blank ? null :
-                                                <OrderCard index={index} showCompletedBtn={true} onDelete={() => handleOrderDelete(index)} details={item} />
-
+                                                (
+                                                    item.products.length === 0 ? null :
+                                                        <OrderCard index={index} showCompletedBtn={true} onDelete={() => handleOrderDelete(index)} details={item} />
+                                                )
                                             }
                                         </TouchableOpacity> : null
                                 }
