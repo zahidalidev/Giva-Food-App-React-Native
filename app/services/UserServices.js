@@ -145,8 +145,8 @@ export const getAllNewRes = async () => {
         let temp = doc.data()
         let temp2 = {}
         temp2.label = temp.name;
-        temp2.value = temp.name;
-        temp2.email = temp.email;
+        temp2.value = temp.email;
+        // temp2.email = temp.email;
         res2.push(temp2)
     });
 
