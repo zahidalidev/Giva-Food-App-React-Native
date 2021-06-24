@@ -27,6 +27,8 @@ function AdminScreen(props) {
     const [image, setImage] = useState(false);
     const [categoryImage, setCategoryImage] = useState(false);
     const [imageCategorySelected, setCategoryImageSelected] = useState(false);
+    const [riderImage, setRiderImage] = useState(false);
+    const [riderImageSelected, setRiderImageSelected] = useState(false);
 
     const [category, setCategory] = useState('');
     const [selectedCategory, setDropCategory] = useState('')
@@ -190,10 +192,14 @@ function AdminScreen(props) {
 
             const { height, width, type, uri } = pickerResult;
 
-            if (evetnType == 'product') {
+            if (evetnType === 'product') {
                 setImage(uri)
                 setImageSelected(true)
-            } else {
+            } else if (evetnType === 'rider') {
+                setRiderImage(uri)
+                setRiderImageSelected(true)
+            }
+            else {
                 setCategoryImage(uri)
                 setCategoryImageSelected(true)
             }
@@ -289,7 +295,7 @@ function AdminScreen(props) {
         }
 
         try {
-            const res = await addUser(body);
+            const res = await addUser(body, type, riderImage);
             if (!res) {
                 alert("Rider Not Added !")
                 return;
@@ -440,6 +446,16 @@ function AdminScreen(props) {
                                                 />
                                             </View>
                                         )}
+
+                                        <TouchableOpacity onPress={() => uploadImages("rider")} style={{ justifyContent: "flex-start", alignItems: "center", flexDirection: "row", marginTop: RFPercentage(4), width: "85%", }} >
+                                            <View style={{ borderRadius: RFPercentage(1.3), backgroundColor: colors.mediumSecondary, width: "50%", height: RFPercentage(6), justifyContent: "center", alignItems: "center" }} >
+                                                <Text style={{ color: colors.white, fontSize: RFPercentage(2.3) }} >Upload Image</Text>
+                                            </View>
+                                            {riderImageSelected ?
+                                                <Text style={{ marginLeft: RFPercentage(2), marginBottom: RFPercentage(1), color: colors.grey, fontSize: RFPercentage(1.8) }} >Image is Selected</Text>
+                                                : <Text style={{ marginLeft: RFPercentage(2), marginBottom: RFPercentage(1), color: colors.danger, fontSize: RFPercentage(1.8) }} >* Image is Not Selected</Text>
+                                            }
+                                        </TouchableOpacity>
 
                                         {/* Add Rider */}
                                         <View style={{ marginTop: RFPercentage(10), width: "85%", flex: 1, alignItems: "flex-end" }} >

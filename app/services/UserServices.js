@@ -1,6 +1,7 @@
 import firebase from "firebase"
 import "firebase/firestore"
 import { SentNotification } from "../components/common/SendNotification";
+import uuid from "uuid";
 
 import { firebaseConfig } from "../config/db"
 
@@ -12,12 +13,38 @@ const firestore = firebase.firestore();
 const userRef = firestore.collection('users')
 
 
-export const addUser = async (body) => {
-    const snapshot = await userRef.where('email', '==', body.email).get();
-    if (snapshot.empty) {
-        return await userRef.add(body);
+export const addUser = async (body, type, uri) => {
+    if (type != 'rider') {
+        const snapshot = await userRef.where('email', '==', body.email).get();
+        if (snapshot.empty) {
+            return await userRef.add(body);
+        }
+        return false;
+    } else {
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", uri, true);
+            xhr.send(null);
+        });
+
+        const ref = firebase.storage().ref().child(uuid.v4());
+        const snapshot = await ref.put(blob);
+
+        // We're done with the blob, close and release it
+        blob.close();
+
+        const ImageUrl = await snapshot.ref.getDownloadURL();
+
+        return await userRef.add({ ...body, ImageUrl });
     }
-    return false;
 }
 
 export const loginUser = async (email, password, notificationToken) => {
