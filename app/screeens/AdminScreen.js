@@ -275,8 +275,9 @@ function AdminScreen(props) {
         const price = foodFeils[1].value
         const description = foodFeils[2].value
         const category = selectedCategory;
+        const rest = selectedRes;
 
-        if (title === '' || price === '' || description === '' || category === '') {
+        if (title === '' || price === '' || description === '' || category === '' || rest === '') {
             alert("All fields are required")
             return;
         }
@@ -286,6 +287,7 @@ function AdminScreen(props) {
             price,
             category,
             description,
+            restaurant: rest
         }
 
         try {
@@ -332,13 +334,13 @@ function AdminScreen(props) {
         try {
             const res = await addUser(body, type, riderImage);
             if (!res) {
-                alert("Rider Not Added !")
+                alert("Not Added !")
                 return;
             }
-            alert("Rider Added")
+            alert("Added")
 
         } catch (error) {
-            console.log("Rider add error: ", error)
+            console.log("add error: ", error)
         }
         setActivityIndic(false)
     }
