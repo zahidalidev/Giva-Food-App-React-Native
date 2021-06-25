@@ -135,6 +135,7 @@ function CartScreen(props) {
 
                 await orderCart(orderObj);
                 alert("Order Successfull")
+                setProducts([])
                 await AsyncStorage.removeItem('product');
                 await getRiderPushTokens('rider')
 

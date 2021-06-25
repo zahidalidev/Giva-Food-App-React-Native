@@ -39,12 +39,13 @@ function ResturentScreen(props) {
 
         try {
             setRefreshing(true);
-            let categoryRef = await getOrderRef();
+            let orderRef = await getOrderRef();
 
-            const observer = categoryRef.onSnapshot(querySnapshot => {
+            const observer = orderRef.onSnapshot(querySnapshot => {
                 querySnapshot.docChanges().forEach(async (change) => {
                     let res = await getAllNewOrders()
                     res = res.filter(item => item.email == user.email)
+                    console.log(res[0])
                     setProducts(res)
                 });
             });
@@ -81,25 +82,23 @@ function ResturentScreen(props) {
                                 showsVerticalScrollIndicator={false}
                                 data={products.length === 0 ? [{ blank: true }] : products}
                                 keyExtractor={(item, index) => index.toString()}
-                                renderItem={({ item, index }) => {
-                                    return item.confirm ?
-                                        <TouchableOpacity activeOpacity={0.7} style={{
-                                            margin: RFPercentage(1),
-                                            marginLeft: "4%",
-                                            padding: RFPercentage(1),
-                                            backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
-                                            width: "90%",
-                                            elevation: 3,
-                                            flexDirection: "column",
-                                        }} >
-                                            {item.blank ? null :
-                                                (
-                                                    item.products.length === 0 ? null :
-                                                        <OrderCard index={index} details={item} />
-                                                )
-                                            }
-                                        </TouchableOpacity> : null
-                                }
+                                renderItem={({ item, index }) =>
+                                    <TouchableOpacity activeOpacity={0.7} style={{
+                                        margin: RFPercentage(1),
+                                        marginLeft: "4%",
+                                        padding: RFPercentage(1),
+                                        backgroundColor: item.toDelete ? "rgba(0, 129, 105, 0.1)" : "white",
+                                        width: "90%",
+                                        elevation: 3,
+                                        flexDirection: "column",
+                                    }} >
+                                        {item.blank ? null :
+                                            (
+                                                item.products.length === 0 ? null :
+                                                    <OrderCard index={index} details={item} />
+                                            )
+                                        }
+                                    </TouchableOpacity>
 
                                 }
                             />
