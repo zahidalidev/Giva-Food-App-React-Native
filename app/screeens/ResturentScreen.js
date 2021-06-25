@@ -104,7 +104,7 @@ function ResturentScreen(props) {
                                     />}
                                 style={{ marginTop: RFPercentage(3.5) }}
                                 showsVerticalScrollIndicator={false}
-                                data={products.length === 0 ? [{ blank: true }] : products}
+                                data={products}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item, index }) => {
                                     return item.confirm ?
@@ -117,11 +117,9 @@ function ResturentScreen(props) {
                                             elevation: 3,
                                             flexDirection: "column",
                                         }} >
-                                            {item.blank ? null :
-                                                (
-                                                    item.products.length === 0 ? null :
-                                                        <OrderCard index={index} showCompletedBtn={true} onDelete={() => handleOrderDelete(index)} details={item} />
-                                                )
+                                            {
+                                                item.products.length === 0 ? null :
+                                                    <OrderCard index={index} showCompletedBtn={true} onDelete={() => handleOrderDelete(index)} details={item} />
                                             }
                                         </TouchableOpacity> : null
                                 }
