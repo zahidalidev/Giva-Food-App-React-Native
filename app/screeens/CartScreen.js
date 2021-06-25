@@ -135,11 +135,12 @@ function CartScreen(props) {
 
                 await orderCart(orderObj);
                 alert("Order Successfull")
+                await AsyncStorage.removeItem('product');
                 await getRiderPushTokens('rider')
 
             } catch (error) {
                 console.log("Order Not Completed: ", error)
-                alert("Order Not Completed: ", error)
+                alert("Order Not Completed")
             }
         }
     }
@@ -176,6 +177,8 @@ function CartScreen(props) {
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
                 <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('homeScreen')} />
                 <Appbar.Content color={colors.white} title={`Cart (${products.length})`} />
+                <Appbar.Content color={colors.white} />
+                <Appbar.Content onPress={() => props.navigation.navigate('myOrdersScreen')} color={colors.white} title={'My Orders'} />
                 {/* <Appbar.Action color={colors.white} icon="account-circle" onPress={() => { }} /> */}
             </Appbar.Header>
 

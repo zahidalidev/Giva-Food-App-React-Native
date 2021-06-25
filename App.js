@@ -18,6 +18,7 @@ import ProfileScreen from "./app/screeens/ProfileScreen"
 import RiderScreen from "./app/screeens/RiderScreen"
 import ResturentScreen from "./app/screeens/ResturentScreen"
 import AdminScreen from "./app/screeens/AdminScreen"
+import MyOrdersScreen from "./app/screeens/MyOrdersScreen"
 
 import colors from "./app/config/colors"
 import AppDrawer from './app/components/AppDrawer';
@@ -27,6 +28,7 @@ const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 LogBox.ignoreLogs(['Setting a timer']);
+LogBox.ignoreAllLogs();
 
 export default function App() {
   const config = {
@@ -62,6 +64,7 @@ export default function App() {
         <Stack.Screen name="resturentScreen" >{(props) => <ResturentScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="adminScreen" >{(props) => <AdminScreen {...props} />}</Stack.Screen>
         <Stack.Screen name="notification" >{(props) => <Notification {...props} />}</Stack.Screen>
+        <Stack.Screen name="myOrdersScreen" >{(props) => <MyOrdersScreen {...props} />}</Stack.Screen>
       </Stack.Navigator>
     );
   }
